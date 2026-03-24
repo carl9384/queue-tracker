@@ -1,5 +1,10 @@
-export function formatTime(date: Date): string {
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+export function formatTime(date: Date, use24Hour: boolean): string {
+  return date.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: !use24Hour,
+  });
 }
 
 export function formatDuration(ms: number): string {
@@ -13,8 +18,12 @@ export function formatDuration(ms: number): string {
   return `${s}s`;
 }
 
-export function formatETA(date: Date): string {
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+export function formatETA(date: Date, use24Hour: boolean): string {
+  return date.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: !use24Hour,
+  });
 }
 
 export function formatDate(date: Date): string {

@@ -16,4 +16,5 @@ export interface QueueSession {
 export interface AppState {
   sessions: QueueSession[];
   activeSessionId: string | null;
+  use24Hour: boolean;
 }

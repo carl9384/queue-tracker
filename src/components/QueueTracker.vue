@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import {
+  getState,
   getActiveSession,
   setActiveSession,
   addCall,
   updateCall,
   deleteCall as storeDeleteCall,
   markSessionDone,
+  toggleTimeFormat,
 } from '../store';
 import { formatTime, formatDuration, formatETA, toLocalInputValue, parseInputTime } from '../format';
 
+const state = getState();
 const session = computed(() => getActiveSession()!);
+const use24Hour = computed(() => state.use24Hour);
 const now = ref(new Date());
 
 const newCallNum = ref('');
@@ -150,8 +154,13 @@ function goBack() {
 
 <template>
   <div class="container">
-    <!-- Back button -->
-    <button class="back-btn" @click="goBack">&#8592; All Sessions</button>
+    <!-- Top bar -->
+    <div class="top-bar">
+      <button class="back-btn" @click="goBack">&#8592; All Sessions</button>
+      <button class="time-toggle" @click="toggleTimeFormat">
+        {{ use24Hour ? '24h' : '12h' }}
+      </button>
+    </div>
 
     <!-- Header -->
     <div class="header">
@@ -197,7 +206,7 @@ function goBack() {
           </div>
           <div class="pred-right">
             <div class="pred-label">Called around</div>
-            <div class="pred-eta">{{ formatETA(prediction.eta) }}</div>
+            <div class="pred-eta">{{ formatETA(prediction.eta, use24Hour) }}</div>
           </div>
         </div>
         <div class="pills">
@@ -226,7 +235,7 @@ function goBack() {
       </div>
       <div class="tile small">
         <div class="tile-label">Joined</div>
-        <div class="tile-value">{{ formatTime(new Date(session.joinedAt)) }}</div>
+        <div class="tile-value">{{ formatTime(new Date(session.joinedAt), use24Hour) }}</div>
       </div>
     </div>
 
@@ -321,7 +330,7 @@ function goBack() {
                 </span>
               </div>
               <div class="history-right">
-                <span class="history-time">{{ formatTime(new Date(c.timestamp)) }}</span>
+                <span class="history-time">{{ formatTime(new Date(c.timestamp), use24Hour) }}</span>
                 <button
                   v-if="session.calls.length > 1"
                   class="row-delete"
@@ -348,8 +357,15 @@ function goBack() {
   gap: 16px;
 }
 
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: -8px;
+}
+
 .back-btn {
-  align-self: flex-start;
   background: none;
   border: none;
   cursor: pointer;
@@ -357,9 +373,25 @@ function goBack() {
   font-size: 12px;
   font-family: 'Courier New', Courier, monospace;
   padding: 4px 0;
-  margin-bottom: -8px;
 }
 .back-btn:hover {
+  color: #f5c842;
+}
+
+.time-toggle {
+  background: rgba(200,144,42,0.12);
+  border: 1px solid rgba(200,144,42,0.25);
+  border-radius: 6px;
+  padding: 4px 10px;
+  color: #c8902a;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+.time-toggle:hover {
+  background: rgba(200,144,42,0.2);
   color: #f5c842;
 }
 

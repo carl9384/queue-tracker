@@ -13,13 +13,14 @@ function loadState(): AppState {
     if (raw) {
       const parsed = JSON.parse(raw) as AppState;
       if (parsed.sessions && Array.isArray(parsed.sessions)) {
+        if (typeof parsed.use24Hour !== 'boolean') parsed.use24Hour = true;
         return parsed;
       }
     }
   } catch {
     // corrupted data
   }
-  return { sessions: [], activeSessionId: null };
+  return { sessions: [], activeSessionId: null, use24Hour: true };
 }
 
 function saveState(state: AppState): void {
@@ -93,4 +94,8 @@ export function deleteSession(sessionId: string): void {
 export function markSessionDone(sessionId: string): void {
   const session = state.sessions.find(s => s.id === sessionId);
   if (session) session.done = true;
+}
+
+export function toggleTimeFormat(): void {
+  state.use24Hour = !state.use24Hour;
 }
