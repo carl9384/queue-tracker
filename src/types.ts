@@ -13,8 +13,12 @@ export interface QueueSession {
   done: boolean;
 }
 
+export type ViewName = 'sessions' | 'tracker' | 'about';
+
 export interface AppState {
   sessions: QueueSession[];
   activeSessionId: string | null;
   use24Hour: boolean;
+  onboardingDone: boolean;
+  currentView: ViewName;
 }

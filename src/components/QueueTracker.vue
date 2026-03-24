@@ -26,6 +26,8 @@ const editingIdx = ref<number | null>(null);
 const editNum = ref('');
 const editTime = ref('');
 
+const showLogTooltip = ref(true);
+
 let timer: ReturnType<typeof setInterval>;
 
 onMounted(() => {
@@ -114,6 +116,7 @@ function handleNewCall() {
   newCallNum.value = '';
   if (!useCustomTime.value) newCallTime.value = toLocalInputValue(new Date());
   newCallRef.value?.focus();
+  showLogTooltip.value = false;
 }
 
 function startEdit(idx: number) {
@@ -127,7 +130,6 @@ function saveEdit() {
   const n = parseInt(editNum.value);
   const t = parseInputTime(editTime.value);
   if (isNaN(n) || !t) { editingIdx.value = null; return; }
-  // Find the actual index in the original calls array
   const sorted = sortedCalls.value;
   const original = sorted[editingIdx.value!];
   const realIdx = session.value.calls.findIndex(
@@ -215,9 +217,9 @@ function goBack() {
           <span
             v-if="prediction.trend"
             class="pill"
-            :style="{ color: prediction.trend === 'faster' ? '#4adf8a' : prediction.trend === 'slower' ? '#df7a4a' : '#b0b0b0' }"
+            :class="prediction.trend"
           >
-            {{ prediction.trend === 'faster' ? '⚡ speeding up' : prediction.trend === 'slower' ? '🐢 slowing down' : '→ steady pace' }}
+            {{ prediction.trend === 'faster' ? 'speeding up' : prediction.trend === 'slower' ? 'slowing down' : 'steady pace' }}
           </span>
         </div>
       </template>
@@ -242,6 +244,9 @@ function goBack() {
     <!-- Log new call -->
     <div class="card">
       <div class="section-label">Log a number call</div>
+      <div v-if="showLogTooltip && sortedCalls.length <= 1" class="tooltip">
+        When a new number is called, type it here and tap Log. The more you log, the better the prediction gets.
+      </div>
       <div class="log-row">
         <input
           ref="newCallRef"
@@ -350,7 +355,7 @@ function goBack() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 16px;
+  padding: 32px 16px 48px;
   min-height: 100vh;
   max-width: 520px;
   margin: 0 auto;
@@ -369,21 +374,21 @@ function goBack() {
   background: none;
   border: none;
   cursor: pointer;
-  color: #c8902a;
+  color: #b8860b;
   font-size: 12px;
   font-family: 'Courier New', Courier, monospace;
   padding: 4px 0;
 }
 .back-btn:hover {
-  color: #f5c842;
+  color: #8a6508;
 }
 
 .time-toggle {
-  background: rgba(200,144,42,0.12);
-  border: 1px solid rgba(200,144,42,0.25);
+  background: #fff;
+  border: 1px solid #d0c4a8;
   border-radius: 6px;
   padding: 4px 10px;
-  color: #c8902a;
+  color: #8a7a5a;
   font-family: 'Courier New', Courier, monospace;
   font-size: 11px;
   font-weight: 700;
@@ -391,8 +396,9 @@ function goBack() {
   cursor: pointer;
 }
 .time-toggle:hover {
-  background: rgba(200,144,42,0.2);
-  color: #f5c842;
+  background: #fdf8ee;
+  color: #5a4a30;
+  border-color: #b8860b;
 }
 
 .header {
@@ -402,7 +408,7 @@ function goBack() {
 .header-sub {
   font-size: 11px;
   letter-spacing: 6px;
-  color: #c8902a;
+  color: #b8860b;
   text-transform: uppercase;
   margin-bottom: 8px;
 }
@@ -411,15 +417,14 @@ function goBack() {
   font-size: 42px;
   font-weight: 900;
   letter-spacing: -1px;
-  color: #f5c842;
-  text-shadow: 0 0 40px rgba(245,200,66,0.3);
+  color: #a0740a;
   line-height: 1;
 }
 .header-tagline {
   margin-top: 8px;
   font-size: 11px;
   letter-spacing: 4px;
-  color: #7a5c2a;
+  color: #9a8a6a;
   text-transform: uppercase;
 }
 
@@ -438,14 +443,15 @@ function goBack() {
 }
 
 .tile {
-  background: rgba(255,200,80,0.05);
-  border: 1px solid rgba(200,144,42,0.2);
+  background: #fff;
+  border: 1px solid #e0d6c2;
   border-radius: 10px;
   padding: 18px 20px;
   text-align: center;
 }
 .tile.accent {
-  border-color: rgba(245,200,66,0.4);
+  border-color: #b8860b;
+  background: #fdf8ee;
 }
 .tile.small {
   padding: 12px 14px;
@@ -453,13 +459,13 @@ function goBack() {
 .tile-label {
   font-size: 10px;
   letter-spacing: 3px;
-  color: #7a5c2a;
+  color: #9a8a6a;
   text-transform: uppercase;
   margin-bottom: 6px;
 }
 .tile-value {
   font-weight: 900;
-  color: #f5e6c8;
+  color: #3a2e1e;
   line-height: 1;
   word-break: break-all;
   font-size: 16px;
@@ -468,19 +474,19 @@ function goBack() {
   font-size: 42px;
 }
 .tile.accent .tile-value {
-  color: #f5c842;
+  color: #a0740a;
 }
 
 .prediction-card {
-  background: rgba(255,200,80,0.06);
-  border: 1px solid rgba(200,144,42,0.35);
+  background: #fff;
+  border: 1px solid #e0d6c2;
   border-radius: 12px;
   padding: 24px 22px;
   width: 100%;
 }
 .prediction-card.done {
-  background: rgba(80,200,80,0.08);
-  border-color: rgba(80,200,80,0.4);
+  background: #f0faf0;
+  border-color: #80c880;
 }
 
 .done-content {
@@ -493,30 +499,30 @@ function goBack() {
 .done-title {
   font-size: 22px;
   font-weight: 900;
-  color: #80e880;
+  color: #2a8a2a;
   letter-spacing: 2px;
 }
 .done-sub {
   font-size: 12px;
-  color: #7a5c2a;
+  color: #8a7a5a;
   margin-top: 6px;
 }
 
 .section-label {
   font-size: 11px;
   letter-spacing: 3px;
-  color: #c8902a;
+  color: #b8860b;
   margin-bottom: 16px;
   text-transform: uppercase;
 }
 
 .waiting-text {
   font-size: 14px;
-  color: #a07840;
+  color: #5a4a30;
 }
 .waiting-hint {
   font-size: 12px;
-  color: #7a5c2a;
+  color: #9a8a6a;
   margin-top: 6px;
 }
 
@@ -529,13 +535,13 @@ function goBack() {
 }
 .pred-label {
   font-size: 11px;
-  color: #7a5c2a;
+  color: #9a8a6a;
   margin-bottom: 4px;
 }
 .pred-wait {
   font-size: 32px;
   font-weight: 900;
-  color: #f5c842;
+  color: #a0740a;
   line-height: 1;
 }
 .pred-right {
@@ -544,7 +550,7 @@ function goBack() {
 .pred-eta {
   font-size: 22px;
   font-weight: 700;
-  color: #f5e6c8;
+  color: #3a2e1e;
 }
 
 .pills {
@@ -557,21 +563,45 @@ function goBack() {
   font-size: 11px;
   padding: 3px 10px;
   border-radius: 20px;
-  background: rgba(200,144,42,0.12);
-  border: 1px solid rgba(200,144,42,0.25);
-  color: #c8902a;
+  background: #fdf8ee;
+  border: 1px solid #e0d6c2;
+  color: #8a7a5a;
   white-space: nowrap;
+}
+.pill.faster {
+  color: #2a7a2a;
+  background: #f0faf0;
+  border-color: #b0dab0;
+}
+.pill.slower {
+  color: #b04030;
+  background: #fef5f3;
+  border-color: #e0c0b8;
+}
+.pill.steady {
+  color: #6a6a6a;
 }
 
 .card {
-  background: rgba(255,200,80,0.04);
-  border: 1px solid rgba(200,144,42,0.25);
+  background: #fff;
+  border: 1px solid #e0d6c2;
   border-radius: 12px;
   padding: 24px 22px;
   width: 100%;
 }
 .history-card {
   padding: 20px 22px;
+}
+
+.tooltip {
+  font-size: 12px;
+  color: #8a7540;
+  background: #fdf8ee;
+  border: 1px solid #e8dfc8;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  line-height: 1.4;
 }
 
 .log-row {
@@ -583,16 +613,19 @@ function goBack() {
 
 .input {
   display: block;
-  background: rgba(255,200,80,0.06);
-  border: 1px solid rgba(200,144,42,0.35);
+  background: #faf8f5;
+  border: 1px solid #d0c4a8;
   border-radius: 8px;
   padding: 12px 14px;
-  color: #f5e6c8;
+  color: #3a2e1e;
   font-family: 'Courier New', Courier, monospace;
   font-size: 18px;
   font-weight: 700;
   outline: none;
-  color-scheme: dark;
+}
+.input:focus {
+  border-color: #b8860b;
+  box-shadow: 0 0 0 2px rgba(184,134,11,0.12);
 }
 
 .num-input {
@@ -612,16 +645,20 @@ function goBack() {
 
 .secondary-btn {
   padding: 12px 18px;
-  background: rgba(245,200,66,0.15);
-  border: 1px solid rgba(245,200,66,0.4);
+  background: #fdf8ee;
+  border: 1px solid #d0c4a8;
   border-radius: 8px;
-  color: #f5c842;
+  color: #a0740a;
   font-family: 'Courier New', Courier, monospace;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 1px;
   cursor: pointer;
   white-space: nowrap;
+}
+.secondary-btn:hover {
+  background: #f5eed8;
+  border-color: #b8860b;
 }
 
 .log-hint {
@@ -634,7 +671,7 @@ function goBack() {
   background: none;
   border: none;
   cursor: pointer;
-  color: #c8902a;
+  color: #b8860b;
   font-size: 11px;
   font-family: 'Courier New', Courier, monospace;
   text-decoration: underline;
@@ -642,12 +679,12 @@ function goBack() {
 }
 .hint-text {
   font-size: 11px;
-  color: #5a3a1a;
+  color: #b0a080;
 }
 
 .history-hint {
   font-size: 11px;
-  color: #5a3a1a;
+  color: #b0a080;
   margin-bottom: 14px;
 }
 
@@ -663,20 +700,20 @@ function goBack() {
   padding: 9px 8px;
   border-radius: 6px;
   cursor: pointer;
-  border-bottom: 1px solid rgba(200,144,42,0.08);
+  border-bottom: 1px solid #f0ebe0;
   transition: background 0.15s;
 }
 .history-row:last-child {
   border-bottom: none;
 }
 .history-row:hover {
-  background: rgba(255,200,80,0.06);
+  background: #fdf8ee;
 }
 .history-row.initial {
-  opacity: 0.75;
+  opacity: 0.65;
 }
 .history-row.mid {
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
 .history-left {
@@ -688,22 +725,22 @@ function goBack() {
   font-size: 17px;
   font-weight: 900;
   min-width: 34px;
-  color: #a07840;
+  color: #8a7a5a;
 }
 .history-num.accent {
-  color: #f5c842;
+  color: #a0740a;
 }
 .initial-badge {
   font-size: 10px;
   letter-spacing: 1px;
-  color: #5a3a1a;
-  border: 1px solid rgba(200,144,42,0.2);
+  color: #b0a080;
+  border: 1px solid #e0d6c2;
   border-radius: 4px;
   padding: 1px 5px;
 }
 .delta {
   font-size: 11px;
-  color: #6a4a1a;
+  color: #b0a080;
 }
 
 .history-right {
@@ -713,24 +750,24 @@ function goBack() {
 }
 .history-time {
   font-size: 11px;
-  color: #7a5c2a;
+  color: #9a8a6a;
 }
 .row-delete {
   background: none;
   border: none;
   cursor: pointer;
-  color: #4a2a0a;
+  color: #c0b090;
   font-size: 13px;
   padding: 0 2px;
   font-family: inherit;
 }
 .row-delete:hover {
-  color: #df7a4a;
+  color: #c05040;
 }
 
 .edit-row {
-  background: rgba(245,200,66,0.07);
-  border: 1px solid rgba(245,200,66,0.3);
+  background: #fdf8ee;
+  border: 1px solid #e0d6c2;
   border-radius: 8px;
   padding: 10px 12px;
   display: flex;
@@ -757,12 +794,15 @@ function goBack() {
 }
 .ghost-btn {
   padding: 7px 10px;
-  background: rgba(255,100,80,0.1);
-  border: 1px solid rgba(255,100,80,0.2);
+  background: #fef5f3;
+  border: 1px solid #e0c0b8;
   border-radius: 6px;
-  color: #df7a4a;
+  color: #c05040;
   font-family: 'Courier New', Courier, monospace;
   font-size: 12px;
   cursor: pointer;
+}
+.ghost-btn:hover {
+  background: #fce8e4;
 }
 </style>

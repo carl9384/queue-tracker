@@ -1,5 +1,5 @@
 import { reactive, watch } from 'vue';
-import type { AppState, QueueSession } from './types';
+import type { AppState, QueueSession, ViewName } from './types';
 
 const STORAGE_KEY = 'queue-tracker-state';
 
@@ -8,19 +8,25 @@ function generateId(): string {
 }
 
 function loadState(): AppState {
+  const defaults: AppState = {
+    sessions: [],
+    activeSessionId: null,
+    use24Hour: true,
+    onboardingDone: false,
+    currentView: 'sessions',
+  };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
-      const parsed = JSON.parse(raw) as AppState;
+      const parsed = JSON.parse(raw);
       if (parsed.sessions && Array.isArray(parsed.sessions)) {
-        if (typeof parsed.use24Hour !== 'boolean') parsed.use24Hour = true;
-        return parsed;
+        return { ...defaults, ...parsed };
       }
     }
   } catch {
     // corrupted data
   }
-  return { sessions: [], activeSessionId: null, use24Hour: true };
+  return defaults;
 }
 
 function saveState(state: AppState): void {
@@ -32,6 +38,14 @@ function saveState(state: AppState): void {
 }
 
 const state = reactive<AppState>(loadState());
+
+// Restore view based on active session
+if (state.activeSessionId && state.sessions.some(s => s.id === state.activeSessionId)) {
+  state.currentView = 'tracker';
+} else {
+  state.activeSessionId = null;
+  if (state.currentView === 'tracker') state.currentView = 'sessions';
+}
 
 watch(state, (val) => saveState(val), { deep: true });
 
@@ -46,6 +60,11 @@ export function getActiveSession(): QueueSession | null {
 
 export function setActiveSession(id: string | null): void {
   state.activeSessionId = id;
+  state.currentView = id ? 'tracker' : 'sessions';
+}
+
+export function navigateTo(view: ViewName): void {
+  state.currentView = view;
 }
 
 export function createSession(name: string, myNumber: number, joinedAt: number, currentNumber: number, observedAt: number): QueueSession {
@@ -60,6 +79,7 @@ export function createSession(name: string, myNumber: number, joinedAt: number, 
   };
   state.sessions.push(session);
   state.activeSessionId = session.id;
+  state.currentView = 'tracker';
   return session;
 }
 
@@ -88,6 +108,7 @@ export function deleteSession(sessionId: string): void {
   state.sessions.splice(idx, 1);
   if (state.activeSessionId === sessionId) {
     state.activeSessionId = null;
+    state.currentView = 'sessions';
   }
 }
 
@@ -98,4 +119,8 @@ export function markSessionDone(sessionId: string): void {
 
 export function toggleTimeFormat(): void {
   state.use24Hour = !state.use24Hour;
+}
+
+export function completeOnboarding(): void {
+  state.onboardingDone = true;
 }
