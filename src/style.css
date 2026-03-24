@@ -1,0 +1,24 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: #1a0f00;
+  font-family: 'Courier New', Courier, monospace;
+  color: #f5e6c8;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(180,100,0,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(120,60,0,0.1) 0%, transparent 60%);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
