@@ -74,6 +74,9 @@ function dismissOnboarding() {
       <div class="header-tagline">line tracker &amp; predictor</div>
     </div>
 
+    <!-- Help link -->
+    <button class="help-link" @click="navigateTo('help')">Help</button>
+
     <!-- Onboarding -->
     <div v-if="showOnboarding" class="onboarding">
       <div class="onboarding-title">Welcome to Queue Watch!</div>
@@ -92,7 +95,7 @@ function dismissOnboarding() {
         </div>
         <div class="step">
           <span class="step-num">4</span>
-          <span class="step-text">Each time a new number is called, <strong>log it</strong> — the app will predict your wait</span>
+          <span class="step-text">Each time a new number is called, <strong>log it</strong> — the app will predict your wait. Missed a few? No problem — just log the current number and predictions will continue</span>
         </div>
       </div>
       <button class="dismiss-btn" @click="dismissOnboarding">Got it</button>
@@ -228,8 +231,7 @@ function dismissOnboarding() {
       No sessions yet. Start a new one to begin tracking your place in line.
     </div>
 
-    <!-- About link -->
-    <button class="about-link" @click="navigateTo('about')">About this app</button>
+    <button class="about-btn" @click="navigateTo('about')">About</button>
   </div>
 </template>
 
@@ -252,7 +254,7 @@ function dismissOnboarding() {
 .header-sub {
   font-size: 11px;
   letter-spacing: 6px;
-  color: #b8860b;
+  color: var(--color-primary);
   text-transform: uppercase;
   margin-bottom: 8px;
 }
@@ -261,22 +263,22 @@ function dismissOnboarding() {
   font-size: 42px;
   font-weight: 900;
   letter-spacing: -1px;
-  color: #a0740a;
+  color: var(--color-primary-dark);
   line-height: 1;
 }
 .header-tagline {
   margin-top: 8px;
   font-size: 11px;
   letter-spacing: 4px;
-  color: #9a8a6a;
+  color: var(--color-text-light);
   text-transform: uppercase;
 }
 
 /* Onboarding */
 .onboarding {
-  background: #fff;
-  border: 1px solid #e0d6c2;
-  border-left: 4px solid #b8860b;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-primary);
   border-radius: 10px;
   padding: 20px 22px;
   width: 100%;
@@ -284,7 +286,7 @@ function dismissOnboarding() {
 .onboarding-title {
   font-size: 15px;
   font-weight: 900;
-  color: #3a2e1e;
+  color: var(--color-text);
   margin-bottom: 14px;
 }
 .onboarding-steps {
@@ -301,8 +303,8 @@ function dismissOnboarding() {
 .step-num {
   flex: 0 0 22px;
   height: 22px;
-  background: #b8860b;
-  color: #fff;
+  background: var(--color-primary);
+  color: var(--color-surface);
   border-radius: 50%;
   font-size: 12px;
   font-weight: 900;
@@ -313,30 +315,30 @@ function dismissOnboarding() {
 }
 .step-text {
   font-size: 13px;
-  color: #5a4a30;
+  color: var(--color-text-secondary);
   line-height: 1.5;
 }
 .dismiss-btn {
   background: none;
-  border: 1px solid #d0c4a8;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   padding: 6px 16px;
-  color: #8a7a5a;
+  color: var(--color-text-muted);
   font-family: 'Courier New', Courier, monospace;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
 }
 .dismiss-btn:hover {
-  background: #f5f0e6;
-  color: #5a4a30;
+  background: var(--color-primary-lighter);
+  color: var(--color-text-secondary);
 }
 
 .tooltip {
   font-size: 12px;
-  color: #8a7540;
-  background: #fdf8ee;
-  border: 1px solid #e8dfc8;
+  color: var(--color-primary-dark);
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   padding: 8px 12px;
   margin-top: 6px;
@@ -345,9 +347,9 @@ function dismissOnboarding() {
 
 .storage-warning {
   font-size: 11px;
-  color: #8a7a5a;
-  background: #fdf8ee;
-  border: 1px solid #e8dfc8;
+  color: var(--color-text-muted);
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 10px 14px;
   text-align: center;
@@ -356,8 +358,8 @@ function dismissOnboarding() {
 }
 
 .card {
-  background: #fff;
-  border: 1px solid #e0d6c2;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 24px 22px;
   width: 100%;
@@ -366,7 +368,7 @@ function dismissOnboarding() {
 .section-label {
   font-size: 11px;
   letter-spacing: 3px;
-  color: #b8860b;
+  color: var(--color-primary);
   margin-bottom: 16px;
   text-transform: uppercase;
 }
@@ -375,7 +377,7 @@ function dismissOnboarding() {
   display: block;
   font-size: 11px;
   letter-spacing: 2px;
-  color: #8a7a5a;
+  color: var(--color-text-muted);
   text-transform: uppercase;
   margin-bottom: 8px;
 }
@@ -385,11 +387,11 @@ function dismissOnboarding() {
 .input {
   display: block;
   width: 100%;
-  background: #faf8f5;
-  border: 1px solid #d0c4a8;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 12px 14px;
-  color: #3a2e1e;
+  color: var(--color-text);
   font-family: 'Courier New', Courier, monospace;
   font-size: 18px;
   font-weight: 700;
@@ -397,18 +399,18 @@ function dismissOnboarding() {
   margin-bottom: 4px;
 }
 .input:focus {
-  border-color: #b8860b;
-  box-shadow: 0 0 0 2px rgba(184,134,11,0.12);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
 }
 
 .divider {
-  border-top: 1px solid #e8dfc8;
+  border-top: 1px solid var(--color-border);
   margin: 22px 0;
 }
 
 .hint {
   font-size: 11px;
-  color: #9a8a6a;
+  color: var(--color-text-light);
   margin-top: 6px;
 }
 
@@ -423,10 +425,10 @@ function dismissOnboarding() {
 .primary-btn {
   width: 100%;
   padding: 14px;
-  background: #b8860b;
+  background: var(--color-primary);
   border: none;
   border-radius: 8px;
-  color: #fff;
+  color: var(--color-surface);
   font-family: 'Courier New', Courier, monospace;
   font-size: 14px;
   font-weight: 900;
@@ -435,7 +437,7 @@ function dismissOnboarding() {
   cursor: pointer;
 }
 .primary-btn:hover {
-  background: #a07508;
+  background: var(--color-primary-dark);
 }
 
 .full-width {
@@ -447,7 +449,7 @@ function dismissOnboarding() {
   background: none;
   border: none;
   cursor: pointer;
-  color: #b8860b;
+  color: var(--color-primary);
   font-size: 12px;
   font-family: 'Courier New', Courier, monospace;
   text-decoration: underline;
@@ -461,14 +463,14 @@ function dismissOnboarding() {
   padding: 12px 10px;
   border-radius: 8px;
   cursor: pointer;
-  border-bottom: 1px solid #f0ebe0;
+  border-bottom: 1px solid var(--color-border-light);
   transition: background 0.15s;
 }
 .session-row:last-child {
   border-bottom: none;
 }
 .session-row:hover {
-  background: #fdf8ee;
+  background: var(--color-primary-light);
 }
 .session-row.past {
   opacity: 0.55;
@@ -483,15 +485,15 @@ function dismissOnboarding() {
 .session-name {
   font-size: 15px;
   font-weight: 900;
-  color: #a0740a;
+  color: var(--color-primary-dark);
 }
 .session-meta {
   font-size: 12px;
-  color: #8a7a5a;
+  color: var(--color-text-muted);
 }
 .session-date {
   font-size: 11px;
-  color: #b0a080;
+  color: var(--color-text-faded);
 }
 
 .session-actions {
@@ -502,34 +504,49 @@ function dismissOnboarding() {
   background: none;
   border: none;
   cursor: pointer;
-  color: #c0b090;
+  color: var(--color-text-disabled);
   font-size: 14px;
   padding: 4px 8px;
   font-family: inherit;
 }
 .delete-btn:hover {
-  color: #c05040;
+  color: var(--color-danger);
 }
 
 .empty-state {
   font-size: 13px;
-  color: #9a8a6a;
+  color: var(--color-text-light);
   text-align: center;
   padding: 40px 0;
 }
 
-.about-link {
+.help-link {
   background: none;
   border: none;
   cursor: pointer;
-  color: #b0a080;
+  color: var(--color-text-faded);
   font-size: 11px;
   font-family: 'Courier New', Courier, monospace;
   text-decoration: underline;
   padding: 0;
   margin-top: 8px;
 }
-.about-link:hover {
-  color: #8a7a5a;
+.help-link:hover {
+  color: var(--color-text-muted);
+}
+
+.about-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-faded);
+  font-size: 11px;
+  font-family: 'Courier New', Courier, monospace;
+  text-decoration: underline;
+  padding: 0;
+  margin-top: 8px;
+}
+.about-btn:hover {
+  color: var(--color-text-muted);
 }
 </style>

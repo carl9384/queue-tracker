@@ -11,52 +11,22 @@ import { navigateTo } from '../store';
     </div>
 
     <div class="card">
-      <div class="section-label">About This App</div>
+      <div class="section-label">About</div>
 
       <p class="body">
-        Queue Watch helps you estimate how long you'll wait in a numbered queue.
-        Enter your ticket number, note which number is currently being served,
-        and log each new number as it's called. The app calculates the average
-        service rate and predicts when your number will be reached.
-      </p>
-
-      <div class="sub-heading">How it works</div>
-      <ol class="steps">
-        <li>Create a <strong>session</strong> — give it a name (like "DMV" or "Bakery") and enter your ticket number along with the current number being served.</li>
-        <li>Each time a new number is called, open the session and <strong>log the number</strong>. The timestamp is recorded automatically.</li>
-        <li>After two or more logs, Queue Watch computes the <strong>average rate</strong> (seconds per number) and estimates your remaining wait time and ETA.</li>
-        <li>A <strong>trend indicator</strong> shows whether the queue is speeding up, slowing down, or holding steady compared to the overall average.</li>
-      </ol>
-
-      <div class="sub-heading">Tips</div>
-      <ul class="tips">
-        <li>The more data points you log, the more accurate the prediction becomes.</li>
-        <li>If you missed a call, you can edit the time field when logging to backdate it.</li>
-        <li>Click any row in the call history to correct a mistake.</li>
-        <li>Use the <strong>24h / 12h</strong> toggle (top-right of the tracker) to switch time format.</li>
-      </ul>
-
-      <div class="sub-heading">Data &amp; privacy</div>
-      <p class="body">
-        All your data is stored <strong>locally in your browser</strong> using
-        localStorage. Nothing is sent to any server. No account is needed.
-      </p>
-      <p class="body warning">
-        Clearing your browser's site data or storage will permanently erase all
-        your saved sessions. There is no way to recover them.
-      </p>
-
-      <div class="sub-heading">Multiple sessions</div>
-      <p class="body">
-        You can track multiple queues at once — for example, if you're waiting
-        at two different counters. Each session is independent and can be
-        resumed at any time from the home screen.
+        This application was conceived of while waiting in the Farmácia Alto Custo
+        — Unidade Várzea do Carmo. Much love and respect for the team at Várzea do
+        Carmo, SPDM in São Paulo, healthcare providers all over Brazil, and for SUS!
       </p>
     </div>
 
-    <div class="footer">
-      Built with Vue + TypeScript
-    </div>
+    <figure class="sus-figure">
+      <img src="/eu-defendo-o-sus.jpg" alt="Eu Defendo o SUS — Sistema Único de Saúde" class="sus-img" />
+      <figcaption class="sus-caption">
+        Image by <a href="https://mapamovsaude.net.br/" target="_blank" rel="noopener noreferrer">Mapa de Movimentos pela Saúde</a>,
+        licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
+      </figcaption>
+    </figure>
   </div>
 </template>
 
@@ -77,13 +47,13 @@ import { navigateTo } from '../store';
   background: none;
   border: none;
   cursor: pointer;
-  color: #b8860b;
+  color: var(--color-primary);
   font-size: 12px;
   font-family: 'Courier New', Courier, monospace;
   padding: 4px 0;
 }
 .back-btn:hover {
-  color: #8a6508;
+  color: var(--color-primary-darker);
 }
 
 .header {
@@ -95,13 +65,13 @@ import { navigateTo } from '../store';
   font-size: 36px;
   font-weight: 900;
   letter-spacing: -1px;
-  color: #a0740a;
+  color: var(--color-primary-dark);
   line-height: 1;
 }
 
 .card {
-  background: #fff;
-  border: 1px solid #e0d6c2;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 28px 24px;
   width: 100%;
@@ -110,51 +80,34 @@ import { navigateTo } from '../store';
 .section-label {
   font-size: 11px;
   letter-spacing: 3px;
-  color: #b8860b;
+  color: var(--color-primary);
   margin-bottom: 18px;
   text-transform: uppercase;
 }
 
-.sub-heading {
-  font-size: 13px;
-  font-weight: 900;
-  color: #3a2e1e;
-  margin-top: 22px;
-  margin-bottom: 8px;
-}
-
 .body {
   font-size: 13px;
-  color: #5a4a30;
+  color: var(--color-text-secondary);
   line-height: 1.65;
   margin-bottom: 4px;
 }
 
-.body.warning {
-  color: #9a6030;
-  background: #fdf8ee;
-  border: 1px solid #e8dfc8;
-  border-radius: 6px;
-  padding: 10px 12px;
+.sus-figure {
+  width: 100%;
+  text-align: center;
+}
+.sus-img {
+  max-width: 280px;
+  width: 100%;
+  border-radius: 8px;
+}
+.sus-caption {
+  font-size: 10px;
+  color: var(--color-text-faded);
   margin-top: 8px;
+  line-height: 1.5;
 }
-
-.steps, .tips {
-  padding-left: 20px;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.steps li, .tips li {
-  font-size: 13px;
-  color: #5a4a30;
-  line-height: 1.55;
-}
-
-.footer {
-  font-size: 11px;
-  color: #b0a080;
-  margin-top: 8px;
+.sus-caption a {
+  color: var(--color-primary);
 }
 </style>

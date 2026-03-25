@@ -9,6 +9,7 @@ import {
   deleteCall as storeDeleteCall,
   markSessionDone,
   toggleTimeFormat,
+  navigateTo,
 } from '../store';
 import { formatTime, formatDuration, formatETA, toLocalInputValue, parseInputTime } from '../format';
 
@@ -159,9 +160,12 @@ function goBack() {
     <!-- Top bar -->
     <div class="top-bar">
       <button class="back-btn" @click="goBack">&#8592; All Sessions</button>
-      <button class="time-toggle" @click="toggleTimeFormat">
-        {{ use24Hour ? '24h' : '12h' }}
-      </button>
+      <div class="time-toggle-group">
+        <span class="time-toggle-label">Toggle time format:</span>
+        <button class="time-toggle" @click="toggleTimeFormat">
+          {{ use24Hour ? '24H' : '12H' }}
+        </button>
+      </div>
     </div>
 
     <!-- Header -->
@@ -347,6 +351,8 @@ function goBack() {
         </template>
       </div>
     </div>
+
+    <button class="about-btn" @click="navigateTo('about')">About</button>
   </div>
 </template>
 
@@ -374,21 +380,30 @@ function goBack() {
   background: none;
   border: none;
   cursor: pointer;
-  color: #b8860b;
+  color: var(--color-primary);
   font-size: 12px;
   font-family: 'Courier New', Courier, monospace;
   padding: 4px 0;
 }
 .back-btn:hover {
-  color: #8a6508;
+  color: var(--color-primary-darker);
 }
 
+.time-toggle-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.time-toggle-label {
+  font-size: 11px;
+  color: var(--color-text-light);
+}
 .time-toggle {
-  background: #fff;
-  border: 1px solid #d0c4a8;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   padding: 4px 10px;
-  color: #8a7a5a;
+  color: var(--color-text-muted);
   font-family: 'Courier New', Courier, monospace;
   font-size: 11px;
   font-weight: 700;
@@ -396,9 +411,9 @@ function goBack() {
   cursor: pointer;
 }
 .time-toggle:hover {
-  background: #fdf8ee;
-  color: #5a4a30;
-  border-color: #b8860b;
+  background: var(--color-primary-light);
+  color: var(--color-text-secondary);
+  border-color: var(--color-primary);
 }
 
 .header {
@@ -408,7 +423,7 @@ function goBack() {
 .header-sub {
   font-size: 11px;
   letter-spacing: 6px;
-  color: #b8860b;
+  color: var(--color-primary);
   text-transform: uppercase;
   margin-bottom: 8px;
 }
@@ -417,14 +432,14 @@ function goBack() {
   font-size: 42px;
   font-weight: 900;
   letter-spacing: -1px;
-  color: #a0740a;
+  color: var(--color-primary-dark);
   line-height: 1;
 }
 .header-tagline {
   margin-top: 8px;
   font-size: 11px;
   letter-spacing: 4px;
-  color: #9a8a6a;
+  color: var(--color-text-light);
   text-transform: uppercase;
 }
 
@@ -443,15 +458,15 @@ function goBack() {
 }
 
 .tile {
-  background: #fff;
-  border: 1px solid #e0d6c2;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 10px;
   padding: 18px 20px;
   text-align: center;
 }
 .tile.accent {
-  border-color: #b8860b;
-  background: #fdf8ee;
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 .tile.small {
   padding: 12px 14px;
@@ -459,13 +474,13 @@ function goBack() {
 .tile-label {
   font-size: 10px;
   letter-spacing: 3px;
-  color: #9a8a6a;
+  color: var(--color-text-light);
   text-transform: uppercase;
   margin-bottom: 6px;
 }
 .tile-value {
   font-weight: 900;
-  color: #3a2e1e;
+  color: var(--color-text);
   line-height: 1;
   word-break: break-all;
   font-size: 16px;
@@ -474,19 +489,19 @@ function goBack() {
   font-size: 42px;
 }
 .tile.accent .tile-value {
-  color: #a0740a;
+  color: var(--color-primary-dark);
 }
 
 .prediction-card {
-  background: #fff;
-  border: 1px solid #e0d6c2;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 24px 22px;
   width: 100%;
 }
 .prediction-card.done {
-  background: #f0faf0;
-  border-color: #80c880;
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
 }
 
 .done-content {
@@ -499,30 +514,30 @@ function goBack() {
 .done-title {
   font-size: 22px;
   font-weight: 900;
-  color: #2a8a2a;
+  color: var(--color-success);
   letter-spacing: 2px;
 }
 .done-sub {
   font-size: 12px;
-  color: #8a7a5a;
+  color: var(--color-text-muted);
   margin-top: 6px;
 }
 
 .section-label {
   font-size: 11px;
   letter-spacing: 3px;
-  color: #b8860b;
+  color: var(--color-primary);
   margin-bottom: 16px;
   text-transform: uppercase;
 }
 
 .waiting-text {
   font-size: 14px;
-  color: #5a4a30;
+  color: var(--color-text-secondary);
 }
 .waiting-hint {
   font-size: 12px;
-  color: #9a8a6a;
+  color: var(--color-text-light);
   margin-top: 6px;
 }
 
@@ -535,13 +550,13 @@ function goBack() {
 }
 .pred-label {
   font-size: 11px;
-  color: #9a8a6a;
+  color: var(--color-text-light);
   margin-bottom: 4px;
 }
 .pred-wait {
   font-size: 32px;
   font-weight: 900;
-  color: #a0740a;
+  color: var(--color-primary-dark);
   line-height: 1;
 }
 .pred-right {
@@ -550,7 +565,7 @@ function goBack() {
 .pred-eta {
   font-size: 22px;
   font-weight: 700;
-  color: #3a2e1e;
+  color: var(--color-text);
 }
 
 .pills {
@@ -563,28 +578,28 @@ function goBack() {
   font-size: 11px;
   padding: 3px 10px;
   border-radius: 20px;
-  background: #fdf8ee;
-  border: 1px solid #e0d6c2;
-  color: #8a7a5a;
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
   white-space: nowrap;
 }
 .pill.faster {
-  color: #2a7a2a;
-  background: #f0faf0;
-  border-color: #b0dab0;
+  color: var(--color-success-light);
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border-light);
 }
 .pill.slower {
-  color: #b04030;
-  background: #fef5f3;
-  border-color: #e0c0b8;
+  color: var(--color-danger-text);
+  background: var(--color-danger-bg);
+  border-color: var(--color-danger-border);
 }
 .pill.steady {
-  color: #6a6a6a;
+  color: var(--color-neutral);
 }
 
 .card {
-  background: #fff;
-  border: 1px solid #e0d6c2;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 24px 22px;
   width: 100%;
@@ -595,9 +610,9 @@ function goBack() {
 
 .tooltip {
   font-size: 12px;
-  color: #8a7540;
-  background: #fdf8ee;
-  border: 1px solid #e8dfc8;
+  color: var(--color-primary-dark);
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   padding: 8px 12px;
   margin-bottom: 12px;
@@ -613,19 +628,19 @@ function goBack() {
 
 .input {
   display: block;
-  background: #faf8f5;
-  border: 1px solid #d0c4a8;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 12px 14px;
-  color: #3a2e1e;
+  color: var(--color-text);
   font-family: 'Courier New', Courier, monospace;
   font-size: 18px;
   font-weight: 700;
   outline: none;
 }
 .input:focus {
-  border-color: #b8860b;
-  box-shadow: 0 0 0 2px rgba(184,134,11,0.12);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
 }
 
 .num-input {
@@ -645,10 +660,10 @@ function goBack() {
 
 .secondary-btn {
   padding: 12px 18px;
-  background: #fdf8ee;
-  border: 1px solid #d0c4a8;
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  color: #a0740a;
+  color: var(--color-primary-dark);
   font-family: 'Courier New', Courier, monospace;
   font-size: 13px;
   font-weight: 700;
@@ -657,8 +672,8 @@ function goBack() {
   white-space: nowrap;
 }
 .secondary-btn:hover {
-  background: #f5eed8;
-  border-color: #b8860b;
+  background: var(--color-primary-lighter);
+  border-color: var(--color-primary);
 }
 
 .log-hint {
@@ -671,7 +686,7 @@ function goBack() {
   background: none;
   border: none;
   cursor: pointer;
-  color: #b8860b;
+  color: var(--color-primary);
   font-size: 11px;
   font-family: 'Courier New', Courier, monospace;
   text-decoration: underline;
@@ -679,12 +694,12 @@ function goBack() {
 }
 .hint-text {
   font-size: 11px;
-  color: #b0a080;
+  color: var(--color-text-faded);
 }
 
 .history-hint {
   font-size: 11px;
-  color: #b0a080;
+  color: var(--color-text-faded);
   margin-bottom: 14px;
 }
 
@@ -700,14 +715,14 @@ function goBack() {
   padding: 9px 8px;
   border-radius: 6px;
   cursor: pointer;
-  border-bottom: 1px solid #f0ebe0;
+  border-bottom: 1px solid var(--color-border-light);
   transition: background 0.15s;
 }
 .history-row:last-child {
   border-bottom: none;
 }
 .history-row:hover {
-  background: #fdf8ee;
+  background: var(--color-primary-light);
 }
 .history-row.initial {
   opacity: 0.65;
@@ -725,22 +740,22 @@ function goBack() {
   font-size: 17px;
   font-weight: 900;
   min-width: 34px;
-  color: #8a7a5a;
+  color: var(--color-text-muted);
 }
 .history-num.accent {
-  color: #a0740a;
+  color: var(--color-primary-dark);
 }
 .initial-badge {
   font-size: 10px;
   letter-spacing: 1px;
-  color: #b0a080;
-  border: 1px solid #e0d6c2;
+  color: var(--color-text-faded);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 1px 5px;
 }
 .delta {
   font-size: 11px;
-  color: #b0a080;
+  color: var(--color-text-faded);
 }
 
 .history-right {
@@ -750,24 +765,24 @@ function goBack() {
 }
 .history-time {
   font-size: 11px;
-  color: #9a8a6a;
+  color: var(--color-text-light);
 }
 .row-delete {
   background: none;
   border: none;
   cursor: pointer;
-  color: #c0b090;
+  color: var(--color-text-disabled);
   font-size: 13px;
   padding: 0 2px;
   font-family: inherit;
 }
 .row-delete:hover {
-  color: #c05040;
+  color: var(--color-danger);
 }
 
 .edit-row {
-  background: #fdf8ee;
-  border: 1px solid #e0d6c2;
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 10px 12px;
   display: flex;
@@ -794,15 +809,30 @@ function goBack() {
 }
 .ghost-btn {
   padding: 7px 10px;
-  background: #fef5f3;
-  border: 1px solid #e0c0b8;
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
   border-radius: 6px;
-  color: #c05040;
+  color: var(--color-danger);
   font-family: 'Courier New', Courier, monospace;
   font-size: 12px;
   cursor: pointer;
 }
 .ghost-btn:hover {
-  background: #fce8e4;
+  background: var(--color-danger-bg-hover);
+}
+
+.about-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-faded);
+  font-size: 11px;
+  font-family: 'Courier New', Courier, monospace;
+  text-decoration: underline;
+  padding: 0;
+  margin-top: 8px;
+}
+.about-btn:hover {
+  color: var(--color-text-muted);
 }
 </style>

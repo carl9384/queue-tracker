@@ -45,6 +45,7 @@ if (state.activeSessionId && state.sessions.some(s => s.id === state.activeSessi
 } else {
   state.activeSessionId = null;
   if (state.currentView === 'tracker') state.currentView = 'sessions';
+  if (!['sessions', 'tracker', 'help', 'about'].includes(state.currentView)) state.currentView = 'sessions';
 }
 
 watch(state, (val) => saveState(val), { deep: true });

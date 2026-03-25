@@ -1,3 +1,49 @@
+:root {
+  /* Primary */
+  --color-primary: #0d9488;
+  --color-primary-dark: #0f766e;
+  --color-primary-darker: #115e59;
+  --color-primary-light: #f0fdfa;
+  --color-primary-lighter: #ccfbf1;
+
+  /* Text */
+  --color-text: #1a2e2e;
+  --color-text-secondary: #1a3a3a;
+  --color-text-muted: #5f7a7a;
+  --color-text-light: #6b8a8a;
+  --color-text-faded: #8aaa9a;
+  --color-text-disabled: #90b0a0;
+
+  /* Surfaces & borders */
+  --color-bg: #f5fafa;
+  --color-surface: #fff;
+  --color-border: #b2dfdb;
+  --color-border-light: #e0f2f1;
+
+  /* Focus */
+  --color-focus-ring: rgba(13, 148, 136, 0.12);
+
+  /* Success */
+  --color-success: #2a8a2a;
+  --color-success-light: #2a7a2a;
+  --color-success-bg: #f0faf0;
+  --color-success-border: #80c880;
+  --color-success-border-light: #b0dab0;
+
+  /* Danger */
+  --color-danger: #c05040;
+  --color-danger-text: #b04030;
+  --color-danger-bg: #fef5f3;
+  --color-danger-bg-hover: #fce8e4;
+  --color-danger-border: #e0c0b8;
+
+  /* Warning */
+  --color-warning-text: #7a6030;
+
+  /* Neutral */
+  --color-neutral: #6a6a6a;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -6,9 +52,9 @@
 
 body {
   min-height: 100vh;
-  background: #faf8f5;
+  background: var(--color-bg);
   font-family: 'Courier New', Courier, monospace;
-  color: #3a2e1e;
+  color: var(--color-text);
 }
 
 input[type="number"]::-webkit-inner-spin-button,

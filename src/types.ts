@@ -13,7 +13,7 @@ export interface QueueSession {
   done: boolean;
 }
 
-export type ViewName = 'sessions' | 'tracker' | 'about';
+export type ViewName = 'sessions' | 'tracker' | 'help' | 'about';
 
 export interface AppState {
   sessions: QueueSession[];
