@@ -70,7 +70,7 @@ function dismissOnboarding() {
     <!-- Header -->
     <div class="header">
       <div class="header-sub">Now Serving</div>
-      <h1 class="header-title">QUEUE<br />WATCH</h1>
+      <h1 class="header-title">QUEUE WATCH</h1>
       <div class="header-tagline">line tracker &amp; predictor</div>
     </div>
 
@@ -107,33 +107,34 @@ function dismissOnboarding() {
     </div>
 
     <!-- New session form -->
-    <div v-if="showNewForm" class="card">
-      <div class="section-label">New Session</div>
+    <form v-if="showNewForm" class="card" @submit.prevent="handleCreate">
+      <h2 class="section-label">New Session</h2>
 
-      <label class="label">Name / Location</label>
+      <label class="label" for="session-name">Name / Location</label>
       <input
+        id="session-name"
         class="input"
         type="text"
         placeholder="e.g. DMV, Post Office, Bakery..."
         v-model="nameInput"
-        @keydown.enter="handleCreate"
       />
 
       <div class="tooltip" v-if="showOnboarding">
         Give your session a name so you can find it later.
       </div>
 
-      <label class="label mt-20">Your ticket number</label>
+      <label class="label mt-20" for="my-number">Your ticket number</label>
       <input
+        id="my-number"
         class="input"
         type="number"
         placeholder="e.g. 47"
         v-model="myNumberInput"
-        @keydown.enter="handleCreate"
       />
 
-      <label class="label mt-16">You joined the line at</label>
+      <label class="label mt-16" for="joined-at">You joined the line at</label>
       <input
+        id="joined-at"
         class="input"
         type="datetime-local"
         v-model="joinedAtInput"
@@ -141,21 +142,22 @@ function dismissOnboarding() {
 
       <div class="divider" />
 
-      <label class="label">Current number being served</label>
+      <label class="label" for="current-num">Current number being served</label>
       <input
+        id="current-num"
         class="input"
         type="number"
         placeholder="e.g. 31"
         v-model="currentNumInput"
-        @keydown.enter="handleCreate"
       />
 
       <div class="tooltip" v-if="showOnboarding">
         Look at the display board or ask — what number are they serving right now?
       </div>
 
-      <label class="label mt-16">Observed at</label>
+      <label class="label mt-16" for="observed-at">Observed at</label>
       <input
+        id="observed-at"
         class="input"
         type="datetime-local"
         v-model="currentNumTimeInput"
@@ -165,10 +167,10 @@ function dismissOnboarding() {
       </div>
 
       <div class="form-actions">
-        <button class="primary-btn" @click="handleCreate">Start Tracking</button>
-        <button class="link-btn" @click="showNewForm = false">Cancel</button>
+        <button type="submit" class="primary-btn">Start Tracking</button>
+        <button type="button" class="link-btn" @click="showNewForm = false">Cancel</button>
       </div>
-    </div>
+    </form>
 
     <!-- New session button -->
     <button v-if="!showNewForm" class="primary-btn full-width" @click="openNewForm">
@@ -176,16 +178,21 @@ function dismissOnboarding() {
     </button>
 
     <!-- Active sessions -->
-    <div v-if="activeSessions.length > 0" class="card">
-      <div class="section-label">Active Sessions</div>
+    <div v-if="activeSessions.length > 0" class="card" role="region" aria-label="Active sessions">
+      <h2 class="section-label">Active Sessions</h2>
       <div
         v-for="s in activeSessions"
         :key="s.id"
         class="session-row"
+        role="button"
+        tabindex="0"
+        :aria-label="`Open session ${s.name}`"
         @click="resumeSession(s.id)"
+        @keydown.enter="resumeSession(s.id)"
+        @keydown.space.prevent="resumeSession(s.id)"
       >
         <div class="session-info">
-          <div class="session-name">{{ s.name }}</div>
+          <h3 class="session-name">{{ s.name }}</h3>
           <div class="session-meta">
             #{{ s.myNumber }} · {{ sessionSummary(s) }}
           </div>
@@ -194,24 +201,29 @@ function dismissOnboarding() {
         <div class="session-actions">
           <button
             class="delete-btn"
+            :aria-label="`Delete session ${s.name}`"
             @click.stop="confirmDelete(s.id)"
-            title="Delete session"
           >&#10005;</button>
         </div>
       </div>
     </div>
 
     <!-- Past sessions -->
-    <div v-if="pastSessions.length > 0" class="card">
-      <div class="section-label">Past Sessions</div>
+    <div v-if="pastSessions.length > 0" class="card" role="region" aria-label="Past sessions">
+      <h2 class="section-label">Past Sessions</h2>
       <div
         v-for="s in pastSessions"
         :key="s.id"
         class="session-row past"
+        role="button"
+        tabindex="0"
+        :aria-label="`Open session ${s.name}`"
         @click="resumeSession(s.id)"
+        @keydown.enter="resumeSession(s.id)"
+        @keydown.space.prevent="resumeSession(s.id)"
       >
         <div class="session-info">
-          <div class="session-name">{{ s.name }}</div>
+          <h3 class="session-name">{{ s.name }}</h3>
           <div class="session-meta">
             #{{ s.myNumber }} · {{ sessionSummary(s) }}
           </div>
@@ -220,8 +232,8 @@ function dismissOnboarding() {
         <div class="session-actions">
           <button
             class="delete-btn"
+            :aria-label="`Delete session ${s.name}`"
             @click.stop="confirmDelete(s.id)"
-            title="Delete session"
           >&#10005;</button>
         </div>
       </div>
@@ -260,6 +272,7 @@ function dismissOnboarding() {
 }
 .header-title {
   margin: 0;
+  font-family: 'Oswald', sans-serif;
   font-size: 42px;
   font-weight: 900;
   letter-spacing: -1px;

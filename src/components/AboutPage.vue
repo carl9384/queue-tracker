@@ -7,11 +7,11 @@ import { navigateTo } from '../store';
     <button class="back-btn" @click="navigateTo('sessions')">&#8592; Back</button>
 
     <div class="header">
-      <h1 class="header-title">QUEUE<br />WATCH</h1>
+      <h1 class="header-title">QUEUE WATCH</h1>
     </div>
 
     <div class="card">
-      <div class="section-label">About</div>
+      <h2 class="section-label">About</h2>
 
       <p class="body">
         This application was conceived of while waiting in the Farmácia Alto Custo
@@ -62,6 +62,7 @@ import { navigateTo } from '../store';
 }
 .header-title {
   margin: 0;
+  font-family: 'Oswald', sans-serif;
   font-size: 36px;
   font-weight: 900;
   letter-spacing: -1px;

@@ -171,7 +171,7 @@ function goBack() {
     <!-- Header -->
     <div class="header">
       <div class="header-sub">Now Serving</div>
-      <h1 class="header-title">QUEUE<br />WATCH</h1>
+      <h1 class="header-title">QUEUE WATCH</h1>
       <div class="header-tagline">{{ session.name }}</div>
     </div>
 
@@ -191,20 +191,20 @@ function goBack() {
     <div :class="['prediction-card', { done: prediction?.done }]">
       <template v-if="prediction?.done">
         <div class="done-content">
-          <div class="done-emoji">&#127881;</div>
+          <div class="done-emoji" aria-hidden="true">&#127881;</div>
           <div class="done-title">YOUR TURN!</div>
           <div class="done-sub">Number {{ session.myNumber }} has been reached</div>
         </div>
       </template>
       <template v-else-if="prediction && 'waiting' in prediction">
-        <div class="section-label">Prediction</div>
+        <h2 class="section-label">Prediction</h2>
         <div class="waiting-text">
           {{ prediction.numbersLeft }} number{{ prediction.numbersLeft !== 1 ? 's' : '' }} ahead of you.
         </div>
         <div class="waiting-hint">Log one more call to start predicting.</div>
       </template>
       <template v-else-if="prediction && 'eta' in prediction">
-        <div class="section-label">Prediction</div>
+        <h2 class="section-label">Prediction</h2>
         <div class="prediction-main">
           <div>
             <div class="pred-label">Estimated wait</div>
@@ -247,7 +247,7 @@ function goBack() {
 
     <!-- Log new call -->
     <div class="card">
-      <div class="section-label">Log a number call</div>
+      <h2 class="section-label">Log a number call</h2>
       <div v-if="showLogTooltip && sortedCalls.length <= 1" class="tooltip">
         When a new number is called, type it here and tap Log. The more you log, the better the prediction gets.
       </div>
@@ -256,6 +256,7 @@ function goBack() {
           ref="newCallRef"
           class="input num-input"
           type="number"
+          aria-label="Number being called"
           :placeholder="`> ${latestCall?.number ?? '?'}`"
           v-model="newCallNum"
           @keydown.enter="handleNewCall"
@@ -264,6 +265,7 @@ function goBack() {
           class="input time-input"
           :class="{ dimmed: !useCustomTime }"
           type="datetime-local"
+          aria-label="Time of call"
           v-model="newCallTime"
           @input="useCustomTime = true"
         />
@@ -285,7 +287,7 @@ function goBack() {
 
     <!-- Call History -->
     <div class="card history-card">
-      <div class="section-label">Call history</div>
+      <h2 class="section-label">Call history</h2>
       <div class="history-hint">Click any row to edit · &#10005; to delete</div>
       <div class="history-list">
         <template v-for="(c, revI) in [...sortedCalls].reverse()" :key="revI">
@@ -294,6 +296,7 @@ function goBack() {
               <input
                 class="input edit-num"
                 type="number"
+                aria-label="Edit number"
                 v-model="editNum"
                 @keydown.enter="saveEdit"
                 autofocus
@@ -301,11 +304,12 @@ function goBack() {
               <input
                 class="input edit-time"
                 type="datetime-local"
+                aria-label="Edit time"
                 v-model="editTime"
                 @keydown.enter="saveEdit"
               />
               <button class="secondary-btn save-btn" @click="saveEdit">Save</button>
-              <button class="ghost-btn" @click="editingIdx = null">&#10005;</button>
+              <button class="ghost-btn" aria-label="Cancel editing" @click="editingIdx = null">&#10005;</button>
             </div>
           </template>
           <template v-else>
@@ -316,7 +320,12 @@ function goBack() {
                 initial: sortedCalls.length - 1 - revI === 0,
                 mid: revI !== 0 && sortedCalls.length - 1 - revI !== 0,
               }"
+              role="button"
+              tabindex="0"
+              :aria-label="`Edit call number ${c.number}`"
               @click="startEdit(sortedCalls.length - 1 - revI)"
+              @keydown.enter="startEdit(sortedCalls.length - 1 - revI)"
+              @keydown.space.prevent="startEdit(sortedCalls.length - 1 - revI)"
             >
               <div class="history-left">
                 <span class="history-num" :class="{ accent: revI === 0 }">#{{ c.number }}</span>
@@ -343,6 +352,7 @@ function goBack() {
                 <button
                   v-if="session.calls.length > 1"
                   class="row-delete"
+                  :aria-label="`Delete call number ${c.number}`"
                   @click.stop="handleDeleteCall(sortedCalls.length - 1 - revI)"
                 >&#10005;</button>
               </div>
@@ -429,6 +439,7 @@ function goBack() {
 }
 .header-title {
   margin: 0;
+  font-family: 'Oswald', sans-serif;
   font-size: 42px;
   font-weight: 900;
   letter-spacing: -1px;

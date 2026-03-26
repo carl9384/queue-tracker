@@ -1,27 +1,27 @@
 :root {
   /* Primary */
-  --color-primary: #0d9488;
-  --color-primary-dark: #0f766e;
-  --color-primary-darker: #115e59;
-  --color-primary-light: #f0fdfa;
-  --color-primary-lighter: #ccfbf1;
+  --color-primary: #3a2010;
+  --color-primary-dark: #2e1808;
+  --color-primary-darker: #201004;
+  --color-primary-light: #faf4f0;
+  --color-primary-lighter: #f0e0d4;
 
   /* Text */
-  --color-text: #1a2e2e;
-  --color-text-secondary: #1a3a3a;
-  --color-text-muted: #5f7a7a;
-  --color-text-light: #6b8a8a;
-  --color-text-faded: #8aaa9a;
-  --color-text-disabled: #90b0a0;
+  --color-text: #2a1a10;
+  --color-text-secondary: #3e2a1a;
+  --color-text-muted: #7a5a3e;
+  --color-text-light: #98784a;
+  --color-text-faded: #b8a07a;
+  --color-text-disabled: #cab498;
 
   /* Surfaces & borders */
-  --color-bg: #f5fafa;
+  --color-bg: #faf8f5;
   --color-surface: #fff;
-  --color-border: #b2dfdb;
-  --color-border-light: #e0f2f1;
+  --color-border: #dac8b0;
+  --color-border-light: #ece0d4;
 
   /* Focus */
-  --color-focus-ring: rgba(13, 148, 136, 0.12);
+  --color-focus-ring: rgba(58, 32, 16, 0.15);
 
   /* Success */
   --color-success: #2a8a2a;
@@ -64,4 +64,29 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  background: var(--color-primary);
+  color: var(--color-surface);
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: 100;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 8px;
+}
+
+/* Global focus styles */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
