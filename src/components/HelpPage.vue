@@ -7,11 +7,11 @@ import { navigateTo } from '../store';
     <button class="back-btn" @click="navigateTo('sessions')">&#8592; Back</button>
 
     <div class="header">
-      <h1 class="header-title">QUEUE<br />WATCH</h1>
+      <h1 class="header-title">QUEUE WATCH</h1>
     </div>
 
     <div class="card">
-      <div class="section-label">Help</div>
+      <h2 class="section-label">Help</h2>
 
       <p class="body">
         Queue Watch helps you estimate how long you'll wait in a numbered queue.
@@ -20,7 +20,7 @@ import { navigateTo } from '../store';
         service rate and predicts when your number will be reached.
       </p>
 
-      <div class="sub-heading">How it works</div>
+      <h3 class="sub-heading">How it works</h3>
       <ol class="steps">
         <li>Create a <strong>session</strong> — give it a name (like "DMV" or "Bakery") and enter your ticket number along with the current number being served.</li>
         <li>Each time a new number is called, open the session and <strong>log the number</strong>. The timestamp is recorded automatically. If you miss a few numbers, don't worry — just log the current number and the app will continue to predict your wait.</li>
@@ -28,7 +28,7 @@ import { navigateTo } from '../store';
         <li>A <strong>trend indicator</strong> shows whether the queue is speeding up, slowing down, or holding steady compared to the overall average.</li>
       </ol>
 
-      <div class="sub-heading">Tips</div>
+      <h3 class="sub-heading">Tips</h3>
       <ul class="tips">
         <li>The more data points you log, the more accurate the prediction becomes.</li>
         <li>If you missed a call, you can edit the time field when logging to backdate it.</li>
@@ -36,7 +36,7 @@ import { navigateTo } from '../store';
         <li>Use the <strong>24h / 12h</strong> toggle (top-right of the tracker) to switch time format.</li>
       </ul>
 
-      <div class="sub-heading">How predictions work</div>
+      <h3 class="sub-heading">How predictions work</h3>
       <p class="body">
         The app calculates the average rate at which numbers are being called
         based on all your logged data points. It divides the numbers remaining
@@ -47,7 +47,7 @@ import { navigateTo } from '../store';
         prediction becomes.
       </p>
 
-      <div class="sub-heading">Data &amp; privacy</div>
+      <h3 class="sub-heading">Data &amp; privacy</h3>
       <p class="body">
         All your data is stored <strong>locally in your browser</strong> using
         localStorage. Nothing is sent to any server. No account is needed.
@@ -57,7 +57,7 @@ import { navigateTo } from '../store';
         your saved sessions. There is no way to recover them.
       </p>
 
-      <div class="sub-heading">Multiple sessions</div>
+      <h3 class="sub-heading">Multiple sessions</h3>
       <p class="body">
         You can track multiple queues at once — for example, if you're waiting
         at two different counters. Each session is independent and can be
@@ -106,6 +106,7 @@ import { navigateTo } from '../store';
 }
 .header-title {
   margin: 0;
+  font-family: 'Oswald', sans-serif;
   font-size: 36px;
   font-weight: 900;
   letter-spacing: -1px;
