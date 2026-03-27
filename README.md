@@ -4,7 +4,7 @@ A line tracker and wait-time predictor for numbered queue systems (DMV, banks, p
 
 Log the numbers being called as you wait, and Queue Watch will estimate your remaining wait time, predict your ETA, and show whether the line is speeding up or slowing down. Run multiple sessions at once, review past sessions, and never wonder "how much longer?" again.
 
-Built with Vue 3 + TypeScript + Vite. All data is stored locally in your browser — no server, no account required.
+Built with Vue 3 + TypeScript + Vite + Claude Code. All data is stored locally in your browser — no server, no account, no network requests, and no tracking.
 
 ## Features
 
