@@ -1,10 +1,16 @@
 import { reactive, watch } from 'vue';
 import type { AppState, QueueSession, ViewName } from './types';
+import { setI18nLocale, isSupportedLocale } from './i18n';
+import type { SupportedLocale } from './i18n';
 
 const STORAGE_KEY = 'queue-tracker-state';
 
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+function detectLocale(): SupportedLocale {
+  return navigator.language?.startsWith('pt') ? 'pt-BR' : 'en-US';
 }
 
 function loadState(): AppState {
@@ -14,6 +20,7 @@ function loadState(): AppState {
     use24Hour: true,
     onboardingDone: false,
     currentView: 'sessions',
+    locale: detectLocale(),
   };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -37,6 +44,12 @@ function saveState(state: AppState): void {
   }
 }
 
+function updateUrlLocale(locale: SupportedLocale): void {
+  const url = new URL(window.location.href);
+  url.searchParams.set('lang', locale);
+  history.replaceState(null, '', url.toString());
+}
+
 const state = reactive<AppState>(loadState());
 
 // Restore view based on active session
@@ -52,6 +65,23 @@ watch(state, (val) => saveState(val), { deep: true });
 
 export function getState() {
   return state;
+}
+
+export function resolveInitialLocale(): SupportedLocale {
+  const params = new URLSearchParams(window.location.search);
+  const langParam = params.get('lang');
+  if (langParam && isSupportedLocale(langParam)) {
+    state.locale = langParam;
+    return langParam;
+  }
+  return state.locale;
+}
+
+export function setLocale(locale: SupportedLocale): void {
+  state.locale = locale;
+  setI18nLocale(locale);
+  updateUrlLocale(locale);
+  document.documentElement.lang = locale;
 }
 
 export function getActiveSession(): QueueSession | null {

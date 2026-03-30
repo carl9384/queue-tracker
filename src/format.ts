@@ -1,5 +1,7 @@
-export function formatTime(date: Date, use24Hour: boolean): string {
-  return date.toLocaleTimeString([], {
+import { getI18nT } from './i18n';
+
+export function formatTime(date: Date, use24Hour: boolean, locale: string = 'en-US'): string {
+  return date.toLocaleTimeString(locale, {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
@@ -8,7 +10,10 @@ export function formatTime(date: Date, use24Hour: boolean): string {
 }
 
 export function formatDuration(ms: number): string {
-  if (ms <= 0) return 'any moment now';
+  if (ms <= 0) {
+    const t = getI18nT();
+    return t('format.anyMomentNow');
+  }
   const totalSec = Math.floor(ms / 1000);
   const h = Math.floor(totalSec / 3600);
   const m = Math.floor((totalSec % 3600) / 60);
@@ -18,16 +23,16 @@ export function formatDuration(ms: number): string {
   return `${s}s`;
 }
 
-export function formatETA(date: Date, use24Hour: boolean): string {
-  return date.toLocaleTimeString([], {
+export function formatETA(date: Date, use24Hour: boolean, locale: string = 'en-US'): string {
+  return date.toLocaleTimeString(locale, {
     hour: '2-digit',
     minute: '2-digit',
     hour12: !use24Hour,
   });
 }
 
-export function formatDate(date: Date): string {
-  return date.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+export function formatDate(date: Date, locale: string = 'en-US'): string {
+  return date.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 export function toLocalInputValue(date: Date): string {

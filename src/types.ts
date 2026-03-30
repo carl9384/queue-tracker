@@ -21,4 +21,5 @@ export interface AppState {
   use24Hour: boolean;
   onboardingDone: boolean;
   currentView: ViewName;
+  locale: 'en-US' | 'pt-BR';
 }

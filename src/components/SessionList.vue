@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { getState, createSession, setActiveSession, deleteSession, completeOnboarding, navigateTo } from '../store';
 import { formatDate, toLocalInputValue, parseInputTime } from '../format';
+import LanguageSwitcher from './LanguageSwitcher.vue';
 
+const { t } = useI18n();
 const state = getState();
 
 const showNewForm = ref(false);
@@ -36,7 +39,7 @@ function handleCreate() {
   if (isNaN(my) || isNaN(curr)) return;
   const jAt = parseInputTime(joinedAtInput.value) ?? Date.now();
   const cAt = parseInputTime(currentNumTimeInput.value) ?? Date.now();
-  const name = nameInput.value.trim() || `Queue ${formatDate(new Date())}`;
+  const name = nameInput.value.trim() || t('newSession.defaultName', { date: formatDate(new Date(), state.locale) });
   createSession(name, my, jAt, curr, cAt);
   showNewForm.value = false;
   if (!state.onboardingDone) completeOnboarding();
@@ -47,7 +50,7 @@ function resumeSession(id: string) {
 }
 
 function confirmDelete(id: string) {
-  if (confirm('Delete this session? This cannot be undone.')) {
+  if (confirm(t('sessions.deleteConfirm'))) {
     deleteSession(id);
   }
 }
@@ -56,8 +59,8 @@ function sessionSummary(s: typeof state.sessions[0]) {
   const sorted = [...s.calls].sort((a, b) => a.number - b.number);
   const latest = sorted[sorted.length - 1];
   const left = s.myNumber - latest.number;
-  if (left <= 0) return 'Done!';
-  return `${left} ahead · now serving #${latest.number}`;
+  if (left <= 0) return t('sessions.done');
+  return t('sessions.ahead', { left, number: latest.number });
 }
 
 function dismissOnboarding() {
@@ -69,70 +72,70 @@ function dismissOnboarding() {
   <div class="container">
     <!-- Header -->
     <div class="header">
-      <div class="header-sub">Now Serving</div>
-      <h1 class="header-title">QUEUE WATCH</h1>
-      <div class="header-tagline">line tracker &amp; predictor</div>
+      <div class="header-sub">{{ t('header.nowServing') }}</div>
+      <h1 class="header-title">{{ t('header.appName') }}</h1>
+      <div class="header-tagline">{{ t('header.tagline') }}</div>
     </div>
 
     <!-- Help link -->
-    <button class="help-link" @click="navigateTo('help')">Help</button>
+    <button class="help-link" @click="navigateTo('help')">{{ t('common.help') }}</button>
 
     <!-- Onboarding -->
     <div v-if="showOnboarding" class="onboarding">
-      <div class="onboarding-title">Welcome to Queue Watch!</div>
+      <div class="onboarding-title">{{ t('onboarding.welcome') }}</div>
       <div class="onboarding-steps">
         <div class="step">
           <span class="step-num">1</span>
-          <span class="step-text">Take a ticket and note your <strong>ticket number</strong></span>
+          <span class="step-text" v-html="t('onboarding.step1')"></span>
         </div>
         <div class="step">
           <span class="step-num">2</span>
-          <span class="step-text">Check what number is currently <strong>being served</strong></span>
+          <span class="step-text" v-html="t('onboarding.step2')"></span>
         </div>
         <div class="step">
           <span class="step-num">3</span>
-          <span class="step-text">Tap <strong>"+ New Queue Session"</strong> and enter both numbers</span>
+          <span class="step-text" v-html="t('onboarding.step3')"></span>
         </div>
         <div class="step">
           <span class="step-num">4</span>
-          <span class="step-text">Each time a new number is called, <strong>log it</strong> — the app will predict your wait. Missed a few? No problem — just log the current number and predictions will continue</span>
+          <span class="step-text" v-html="t('onboarding.step4')"></span>
         </div>
       </div>
-      <button class="dismiss-btn" @click="dismissOnboarding">Got it</button>
+      <button class="dismiss-btn" @click="dismissOnboarding">{{ t('common.gotIt') }}</button>
     </div>
 
     <!-- Storage warning -->
     <div class="storage-warning">
-      Your sessions are stored in this browser only. Clearing your site data or browser storage will erase all sessions.
+      {{ t('storageWarning') }}
     </div>
 
     <!-- New session form -->
     <form v-if="showNewForm" class="card" @submit.prevent="handleCreate">
-      <h2 class="section-label">New Session</h2>
+      <h2 class="section-label">{{ t('newSession.title') }}</h2>
 
-      <label class="label" for="session-name">Name / Location</label>
+      <label class="label" for="session-name">{{ t('newSession.nameLabel') }}</label>
       <input
         id="session-name"
         class="input"
         type="text"
-        placeholder="e.g. DMV, Post Office, Bakery..."
+        :placeholder="t('newSession.namePlaceholder')"
         v-model="nameInput"
       />
 
       <div class="tooltip" v-if="showOnboarding">
-        Give your session a name so you can find it later.
+        {{ t('newSession.nameTooltip') }}
       </div>
 
-      <label class="label mt-20" for="my-number">Your ticket number</label>
+      <label class="label mt-20" for="my-number">{{ t('newSession.myNumberLabel') }}</label>
       <input
         id="my-number"
         class="input"
         type="number"
-        placeholder="e.g. 47"
+        :placeholder="t('newSession.myNumberPlaceholder')"
         v-model="myNumberInput"
       />
 
-      <label class="label mt-16" for="joined-at">You joined the line at</label>
+      <label class="label mt-16" for="joined-at">{{ t('newSession.joinedAtLabel') }}</label>
       <input
         id="joined-at"
         class="input"
@@ -142,20 +145,20 @@ function dismissOnboarding() {
 
       <div class="divider" />
 
-      <label class="label" for="current-num">Current number being served</label>
+      <label class="label" for="current-num">{{ t('newSession.currentNumLabel') }}</label>
       <input
         id="current-num"
         class="input"
         type="number"
-        placeholder="e.g. 31"
+        :placeholder="t('newSession.currentNumPlaceholder')"
         v-model="currentNumInput"
       />
 
       <div class="tooltip" v-if="showOnboarding">
-        Look at the display board or ask — what number are they serving right now?
+        {{ t('newSession.currentNumTooltip') }}
       </div>
 
-      <label class="label mt-16" for="observed-at">Observed at</label>
+      <label class="label mt-16" for="observed-at">{{ t('newSession.observedAtLabel') }}</label>
       <input
         id="observed-at"
         class="input"
@@ -163,30 +166,30 @@ function dismissOnboarding() {
         v-model="currentNumTimeInput"
       />
       <div class="hint">
-        Change this if you noted the number earlier but are entering it now.
+        {{ t('newSession.observedAtHint') }}
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="primary-btn">Start Tracking</button>
-        <button type="button" class="link-btn" @click="showNewForm = false">Cancel</button>
+        <button type="submit" class="primary-btn">{{ t('newSession.startTracking') }}</button>
+        <button type="button" class="link-btn" @click="showNewForm = false">{{ t('common.cancel') }}</button>
       </div>
     </form>
 
     <!-- New session button -->
     <button v-if="!showNewForm" class="primary-btn full-width" @click="openNewForm">
-      + New Queue Session
+      {{ t('sessions.newButton') }}
     </button>
 
     <!-- Active sessions -->
-    <div v-if="activeSessions.length > 0" class="card" role="region" aria-label="Active sessions">
-      <h2 class="section-label">Active Sessions</h2>
+    <div v-if="activeSessions.length > 0" class="card" role="region" :aria-label="t('sessions.activeTitle')">
+      <h2 class="section-label">{{ t('sessions.activeTitle') }}</h2>
       <div
         v-for="s in activeSessions"
         :key="s.id"
         class="session-row"
         role="button"
         tabindex="0"
-        :aria-label="`Open session ${s.name}`"
+        :aria-label="t('sessions.openSession', { name: s.name })"
         @click="resumeSession(s.id)"
         @keydown.enter="resumeSession(s.id)"
         @keydown.space.prevent="resumeSession(s.id)"
@@ -196,12 +199,12 @@ function dismissOnboarding() {
           <div class="session-meta">
             #{{ s.myNumber }} · {{ sessionSummary(s) }}
           </div>
-          <div class="session-date">{{ formatDate(new Date(s.createdAt)) }}</div>
+          <div class="session-date">{{ formatDate(new Date(s.createdAt), state.locale) }}</div>
         </div>
         <div class="session-actions">
           <button
             class="delete-btn"
-            :aria-label="`Delete session ${s.name}`"
+            :aria-label="t('sessions.deleteSession', { name: s.name })"
             @click.stop="confirmDelete(s.id)"
           >&#10005;</button>
         </div>
@@ -209,15 +212,15 @@ function dismissOnboarding() {
     </div>
 
     <!-- Past sessions -->
-    <div v-if="pastSessions.length > 0" class="card" role="region" aria-label="Past sessions">
-      <h2 class="section-label">Past Sessions</h2>
+    <div v-if="pastSessions.length > 0" class="card" role="region" :aria-label="t('sessions.pastTitle')">
+      <h2 class="section-label">{{ t('sessions.pastTitle') }}</h2>
       <div
         v-for="s in pastSessions"
         :key="s.id"
         class="session-row past"
         role="button"
         tabindex="0"
-        :aria-label="`Open session ${s.name}`"
+        :aria-label="t('sessions.openSession', { name: s.name })"
         @click="resumeSession(s.id)"
         @keydown.enter="resumeSession(s.id)"
         @keydown.space.prevent="resumeSession(s.id)"
@@ -227,12 +230,12 @@ function dismissOnboarding() {
           <div class="session-meta">
             #{{ s.myNumber }} · {{ sessionSummary(s) }}
           </div>
-          <div class="session-date">{{ formatDate(new Date(s.createdAt)) }}</div>
+          <div class="session-date">{{ formatDate(new Date(s.createdAt), state.locale) }}</div>
         </div>
         <div class="session-actions">
           <button
             class="delete-btn"
-            :aria-label="`Delete session ${s.name}`"
+            :aria-label="t('sessions.deleteSession', { name: s.name })"
             @click.stop="confirmDelete(s.id)"
           >&#10005;</button>
         </div>
@@ -240,10 +243,11 @@ function dismissOnboarding() {
     </div>
 
     <div v-if="state.sessions.length === 0 && !showNewForm && !showOnboarding" class="empty-state">
-      No sessions yet. Start a new one to begin tracking your place in line.
+      {{ t('sessions.emptyState') }}
     </div>
 
-    <button class="about-btn" @click="navigateTo('about')">About</button>
+    <button class="about-btn" @click="navigateTo('about')">{{ t('common.about') }}</button>
+    <LanguageSwitcher />
   </div>
 </template>
 
@@ -542,7 +546,6 @@ function dismissOnboarding() {
   font-family: 'Courier New', Courier, monospace;
   text-decoration: underline;
   padding: 0;
-  margin-top: 8px;
 }
 .help-link:hover {
   color: var(--color-text-muted);

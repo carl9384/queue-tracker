@@ -1,0 +1,123 @@
+{
+  "common": {
+    "back": "Voltar",
+    "about": "Sobre",
+    "help": "Ajuda",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "log": "Registrar",
+    "gotIt": "Entendi",
+    "skipToContent": "Ir para o conte\u00fado"
+  },
+  "header": {
+    "nowServing": "Senha Atual",
+    "appName": "QUEUE WATCH",
+    "tagline": "rastreador de filas e previs\u00f5es",
+    "pageTitle": "Queue Watch \u2014 Rastreador de Filas e Previs\u00f5es"
+  },
+  "sessions": {
+    "activeTitle": "Sess\u00f5es Ativas",
+    "pastTitle": "Sess\u00f5es Anteriores",
+    "newButton": "+ Nova Sess\u00e3o",
+    "emptyState": "Nenhuma sess\u00e3o ainda. Comece uma nova para acompanhar sua posi\u00e7\u00e3o na fila.",
+    "deleteConfirm": "Excluir esta sess\u00e3o? Esta a\u00e7\u00e3o n\u00e3o pode ser desfeita.",
+    "openSession": "Abrir sess\u00e3o {name}",
+    "deleteSession": "Excluir sess\u00e3o {name}",
+    "done": "Pronto!",
+    "ahead": "{left} na frente \u00b7 senha atual #{number}"
+  },
+  "newSession": {
+    "title": "Nova Sess\u00e3o",
+    "nameLabel": "Nome / Local",
+    "namePlaceholder": "ex. Farm\u00e1cia, Posto de Sa\u00fade, Padaria...",
+    "nameTooltip": "D\u00ea um nome \u00e0 sess\u00e3o para encontr\u00e1-la depois.",
+    "myNumberLabel": "Sua senha",
+    "myNumberPlaceholder": "ex. 47",
+    "joinedAtLabel": "Voc\u00ea entrou na fila \u00e0s",
+    "currentNumLabel": "Senha sendo atendida agora",
+    "currentNumPlaceholder": "ex. 31",
+    "currentNumTooltip": "Olhe no painel ou pergunte \u2014 qual senha est\u00e1 sendo chamada agora?",
+    "observedAtLabel": "Observado \u00e0s",
+    "observedAtHint": "Altere se voc\u00ea anotou a senha antes mas est\u00e1 digitando agora.",
+    "startTracking": "Come\u00e7ar a Rastrear",
+    "defaultName": "Fila {date}"
+  },
+  "onboarding": {
+    "welcome": "Bem-vindo ao Queue Watch!",
+    "step1": "Pegue uma senha e anote o <strong>n\u00famero da sua senha</strong>",
+    "step2": "Veja qual n\u00famero est\u00e1 sendo <strong>atendido</strong> no momento",
+    "step3": "Toque em <strong>\u201c+ Nova Sess\u00e3o\u201d</strong> e insira os dois n\u00fameros",
+    "step4": "Cada vez que uma nova senha for chamada, <strong>registre</strong> \u2014 o app vai prever sua espera. Perdeu algumas? Sem problema \u2014 registre a senha atual e as previs\u00f5es continuar\u00e3o"
+  },
+  "storageWarning": "Suas sess\u00f5es s\u00e3o armazenadas apenas neste navegador. Limpar os dados do site ou o armazenamento do navegador apagar\u00e1 todas as sess\u00f5es.",
+  "tracker": {
+    "allSessions": "Todas as Sess\u00f5es",
+    "toggleTimeFormat": "Formato de hora:",
+    "yourNumber": "Sua Senha",
+    "nowServing": "Senha Atual",
+    "yourTurn": "SUA VEZ!",
+    "numberReached": "A senha {n} foi alcan\u00e7ada",
+    "prediction": "Previs\u00e3o",
+    "numbersAhead": "{n} senha na sua frente. | {n} senhas na sua frente.",
+    "waitingHint": "Registre mais uma chamada para come\u00e7ar a prever.",
+    "estimatedWait": "Espera estimada",
+    "calledAround": "Chamado por volta das",
+    "ahead": "{n} na frente",
+    "rateSeconds": "~{n}s por senha",
+    "rateMinutes": "~{n}m por senha",
+    "speedingUp": "acelerando",
+    "slowingDown": "desacelerando",
+    "steadyPace": "ritmo estável",
+    "waited": "Esperando",
+    "logs": "Registros",
+    "joined": "Entrada",
+    "sPerNum": "{n}s/senha"
+  },
+  "callLog": {
+    "title": "Registrar uma chamada",
+    "tooltip": "Quando uma nova senha for chamada, digite aqui e toque em Registrar. Quanto mais voc\u00ea registrar, melhor a previs\u00e3o.",
+    "numberLabel": "Senha sendo chamada",
+    "timeLabel": "Hora da chamada",
+    "switchBackToNow": "voltar para hora atual",
+    "timeAutoFill": "O campo de hora \u00e9 preenchido automaticamente \u2014 edite para registrar uma chamada anterior",
+    "historyTitle": "Hist\u00f3rico de chamadas",
+    "historyHint": "Clique em uma linha para editar \u00b7 \u2715 para excluir",
+    "editCallNumber": "Editar chamada n\u00famero {n}",
+    "editNumber": "Editar n\u00famero",
+    "editTime": "Editar hora",
+    "cancelEditing": "Cancelar edi\u00e7\u00e3o",
+    "deleteCallNumber": "Excluir chamada n\u00famero {n}",
+    "initial": "INICIAL"
+  },
+  "format": {
+    "anyMomentNow": "a qualquer momento"
+  },
+  "help": {
+    "title": "Ajuda",
+    "intro": "O Queue Watch ajuda voc\u00ea a estimar quanto tempo vai esperar em uma fila com senhas numeradas. Insira o n\u00famero da sua senha, veja qual n\u00famero est\u00e1 sendo atendido e registre cada nova senha chamada. O app calcula a taxa m\u00e9dia de atendimento e prev\u00ea quando sua senha ser\u00e1 chamada.",
+    "howItWorksTitle": "Como funciona",
+    "step1": "Crie uma <strong>sess\u00e3o</strong> \u2014 d\u00ea um nome (como \u201cFarm\u00e1cia\u201d ou \u201cPadaria\u201d) e insira o n\u00famero da sua senha junto com o n\u00famero sendo atendido.",
+    "step2": "Cada vez que uma nova senha for chamada, abra a sess\u00e3o e <strong>registre o n\u00famero</strong>. O hor\u00e1rio \u00e9 registrado automaticamente. Se voc\u00ea perder algumas senhas, n\u00e3o se preocupe \u2014 registre a senha atual e o app continuar\u00e1 a prever sua espera.",
+    "step3": "Ap\u00f3s dois ou mais registros, o Queue Watch calcula a <strong>taxa m\u00e9dia</strong> (segundos por senha) e estima o tempo restante de espera e o hor\u00e1rio previsto.",
+    "step4": "Um <strong>indicador de tend\u00eancia</strong> mostra se a fila est\u00e1 acelerando, desacelerando ou mantendo um ritmo est\u00e1vel em compara\u00e7\u00e3o com a m\u00e9dia geral.",
+    "tipsTitle": "Dicas",
+    "tip1": "Quanto mais dados voc\u00ea registrar, mais precisa a previs\u00e3o se torna.",
+    "tip2": "Se voc\u00ea perdeu uma chamada, pode editar o campo de hora ao registrar para antedatar.",
+    "tip3": "Clique em qualquer linha no hist\u00f3rico de chamadas para corrigir um erro.",
+    "tip4": "Use o bot\u00e3o <strong>24h / 12h</strong> (canto superior direito do rastreador) para alternar o formato de hora.",
+    "predictionsTitle": "Como as previs\u00f5es funcionam",
+    "predictionsBody": "O app calcula a taxa m\u00e9dia de chamada de senhas com base em todos os seus registros. Ele divide as senhas restantes por essa taxa para estimar o tempo de espera e o hor\u00e1rio previsto. Com tr\u00eas ou mais registros, tamb\u00e9m compara a taxa mais recente com a m\u00e9dia geral para mostrar uma tend\u00eancia \u2014 se a fila est\u00e1 acelerando, desacelerando ou mantendo um ritmo est\u00e1vel. Quanto mais senhas voc\u00ea registrar, mais precisa a previs\u00e3o se torna.",
+    "privacyTitle": "Dados e privacidade",
+    "privacyBody": "Todos os seus dados s\u00e3o armazenados <strong>localmente no seu navegador</strong> usando localStorage. Nada \u00e9 enviado a nenhum servidor. Nenhuma conta \u00e9 necess\u00e1ria.",
+    "privacyWarning": "Limpar os dados do site ou o armazenamento do navegador apagar\u00e1 permanentemente todas as suas sess\u00f5es salvas. N\u00e3o h\u00e1 como recuper\u00e1-las.",
+    "multipleTitle": "M\u00faltiplas sess\u00f5es",
+    "multipleBody": "Voc\u00ea pode acompanhar v\u00e1rias filas ao mesmo tempo \u2014 por exemplo, se estiver esperando em dois guich\u00eas diferentes. Cada sess\u00e3o \u00e9 independente e pode ser retomada a qualquer momento pela tela inicial.",
+    "footer": "Feito com Vue + TypeScript + Claude Code"
+  },
+  "about": {
+    "title": "Sobre",
+    "body": "Este aplicativo foi concebido enquanto esperava na Farm\u00e1cia Alto Custo \u2014 Unidade V\u00e1rzea do Carmo. Muito amor e respeito pela equipe da V\u00e1rzea do Carmo, SPDM em S\u00e3o Paulo, profissionais de sa\u00fade de todo o Brasil, e pelo SUS!",
+    "imageAlt": "Eu Defendo o SUS \u2014 Sistema \u00danico de Sa\u00fade",
+    "imageCaption": "Imagem por <a href=\"https://mapamovsaude.net.br/\" target=\"_blank\" rel=\"noopener noreferrer\">Mapa de Movimentos pela Sa\u00fade</a>, licenciada sob <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\" target=\"_blank\" rel=\"noopener noreferrer\">CC BY-SA 4.0</a>"
+  }
+}
