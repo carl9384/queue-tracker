@@ -259,6 +259,7 @@ function goBack() {
         <input
           ref="newCallRef"
           class="input num-input"
+          :class="{ glow: !prediction?.done }"
           type="number"
           :aria-label="t('callLog.numberLabel')"
           :placeholder="`> ${latestCall?.number ?? '?'}`"
@@ -663,6 +664,18 @@ function goBack() {
   width: 90px;
   flex: 0 0 90px;
   font-size: 16px;
+}
+.num-input.glow {
+  animation: subtle-glow 2s ease-in-out infinite;
+  border-color: var(--color-primary);
+}
+@keyframes subtle-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px 1px rgba(58, 32, 16, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 14px 4px rgba(58, 32, 16, 0.28);
+  }
 }
 .time-input {
   flex: 1;
