@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
+import { useI18n } from 'vue-i18n';
 import {
   getState,
   getActiveSession,
@@ -12,10 +13,13 @@ import {
   navigateTo,
 } from '../store';
 import { formatTime, formatDuration, formatETA, toLocalInputValue, parseInputTime } from '../format';
+import LanguageSwitcher from './LanguageSwitcher.vue';
 
+const { t } = useI18n();
 const state = getState();
 const session = computed(() => getActiveSession()!);
 const use24Hour = computed(() => state.use24Hour);
+const locale = computed(() => state.locale);
 const now = ref(new Date());
 
 const newCallNum = ref('');
@@ -98,8 +102,8 @@ const prediction = computed(() => {
 
   const secPerNum = 1 / (overallRate * 1000);
   const rateDisplay = secPerNum < 60
-    ? `~${Math.round(secPerNum)}s per number`
-    : `~${Math.round(secPerNum / 60)}m per number`;
+    ? t('tracker.rateSeconds', { n: Math.round(secPerNum) })
+    : t('tracker.rateMinutes', { n: Math.round(secPerNum / 60) });
 
   return { eta, msFromNow, numbersLeft, trend, rateDisplay } as const;
 });
@@ -129,14 +133,14 @@ function startEdit(idx: number) {
 
 function saveEdit() {
   const n = parseInt(editNum.value);
-  const t = parseInputTime(editTime.value);
-  if (isNaN(n) || !t) { editingIdx.value = null; return; }
+  const ts = parseInputTime(editTime.value);
+  if (isNaN(n) || !ts) { editingIdx.value = null; return; }
   const sorted = sortedCalls.value;
   const original = sorted[editingIdx.value!];
   const realIdx = session.value.calls.findIndex(
     c => c.number === original.number && c.timestamp === original.timestamp
   );
-  if (realIdx !== -1) updateCall(session.value.id, realIdx, n, t);
+  if (realIdx !== -1) updateCall(session.value.id, realIdx, n, ts);
   editingIdx.value = null;
 }
 
@@ -159,30 +163,33 @@ function goBack() {
   <div class="container">
     <!-- Top bar -->
     <div class="top-bar">
-      <button class="back-btn" @click="goBack">&#8592; All Sessions</button>
-      <div class="time-toggle-group">
-        <span class="time-toggle-label">Toggle time format:</span>
-        <button class="time-toggle" @click="toggleTimeFormat">
-          {{ use24Hour ? '24H' : '12H' }}
-        </button>
+      <button class="back-btn" @click="goBack">&#8592; {{ t('tracker.allSessions') }}</button>
+      <div class="top-bar-right">
+        <div class="time-toggle-group">
+          <span class="time-toggle-label">{{ t('tracker.toggleTimeFormat') }}</span>
+          <button class="time-toggle" @click="toggleTimeFormat">
+            {{ use24Hour ? '24H' : '12H' }}
+          </button>
+        </div>
+        <LanguageSwitcher />
       </div>
     </div>
 
     <!-- Header -->
     <div class="header">
-      <div class="header-sub">Now Serving</div>
-      <h1 class="header-title">QUEUE WATCH</h1>
+      <div class="header-sub">{{ t('header.nowServing') }}</div>
+      <h1 class="header-title">{{ t('header.appName') }}</h1>
       <div class="header-tagline">{{ session.name }}</div>
     </div>
 
     <!-- Main tiles -->
     <div class="grid-2">
       <div class="tile accent">
-        <div class="tile-label">Your Number</div>
+        <div class="tile-label">{{ t('tracker.yourNumber') }}</div>
         <div class="tile-value big">{{ session.myNumber }}</div>
       </div>
       <div class="tile">
-        <div class="tile-label">Now Serving</div>
+        <div class="tile-label">{{ t('tracker.nowServing') }}</div>
         <div class="tile-value big">{{ latestCall?.number ?? '—' }}</div>
       </div>
     </div>
@@ -192,38 +199,38 @@ function goBack() {
       <template v-if="prediction?.done">
         <div class="done-content">
           <div class="done-emoji" aria-hidden="true">&#127881;</div>
-          <div class="done-title">YOUR TURN!</div>
-          <div class="done-sub">Number {{ session.myNumber }} has been reached</div>
+          <div class="done-title">{{ t('tracker.yourTurn') }}</div>
+          <div class="done-sub">{{ t('tracker.numberReached', { n: session.myNumber }) }}</div>
         </div>
       </template>
       <template v-else-if="prediction && 'waiting' in prediction">
-        <h2 class="section-label">Prediction</h2>
+        <h2 class="section-label">{{ t('tracker.prediction') }}</h2>
         <div class="waiting-text">
-          {{ prediction.numbersLeft }} number{{ prediction.numbersLeft !== 1 ? 's' : '' }} ahead of you.
+          {{ t('tracker.numbersAhead', prediction.numbersLeft) }}
         </div>
-        <div class="waiting-hint">Log one more call to start predicting.</div>
+        <div class="waiting-hint">{{ t('tracker.waitingHint') }}</div>
       </template>
       <template v-else-if="prediction && 'eta' in prediction">
-        <h2 class="section-label">Prediction</h2>
+        <h2 class="section-label">{{ t('tracker.prediction') }}</h2>
         <div class="prediction-main">
           <div>
-            <div class="pred-label">Estimated wait</div>
+            <div class="pred-label">{{ t('tracker.estimatedWait') }}</div>
             <div class="pred-wait">{{ formatDuration(prediction.msFromNow) }}</div>
           </div>
           <div class="pred-right">
-            <div class="pred-label">Called around</div>
-            <div class="pred-eta">{{ formatETA(prediction.eta, use24Hour) }}</div>
+            <div class="pred-label">{{ t('tracker.calledAround') }}</div>
+            <div class="pred-eta">{{ formatETA(prediction.eta, use24Hour, locale) }}</div>
           </div>
         </div>
         <div class="pills">
-          <span class="pill">{{ prediction.numbersLeft }} ahead</span>
+          <span class="pill">{{ t('tracker.ahead', { n: prediction.numbersLeft }) }}</span>
           <span v-if="prediction.rateDisplay" class="pill">{{ prediction.rateDisplay }}</span>
           <span
             v-if="prediction.trend"
             class="pill"
             :class="prediction.trend"
           >
-            {{ prediction.trend === 'faster' ? 'speeding up' : prediction.trend === 'slower' ? 'slowing down' : 'steady pace' }}
+            {{ prediction.trend === 'faster' ? t('tracker.speedingUp') : prediction.trend === 'slower' ? t('tracker.slowingDown') : t('tracker.steadyPace') }}
           </span>
         </div>
       </template>
@@ -232,31 +239,31 @@ function goBack() {
     <!-- Stats row -->
     <div class="grid-3">
       <div class="tile small">
-        <div class="tile-label">Waited</div>
+        <div class="tile-label">{{ t('tracker.waited') }}</div>
         <div class="tile-value">{{ formatDuration(waitedMs) }}</div>
       </div>
       <div class="tile small">
-        <div class="tile-label">Logs</div>
+        <div class="tile-label">{{ t('tracker.logs') }}</div>
         <div class="tile-value">{{ sortedCalls.length }}</div>
       </div>
       <div class="tile small">
-        <div class="tile-label">Joined</div>
-        <div class="tile-value">{{ formatTime(new Date(session.joinedAt), use24Hour) }}</div>
+        <div class="tile-label">{{ t('tracker.joined') }}</div>
+        <div class="tile-value">{{ formatTime(new Date(session.joinedAt), use24Hour, locale) }}</div>
       </div>
     </div>
 
     <!-- Log new call -->
     <div class="card">
-      <h2 class="section-label">Log a number call</h2>
+      <h2 class="section-label">{{ t('callLog.title') }}</h2>
       <div v-if="showLogTooltip && sortedCalls.length <= 1" class="tooltip">
-        When a new number is called, type it here and tap Log. The more you log, the better the prediction gets.
+        {{ t('callLog.tooltip') }}
       </div>
       <div class="log-row">
         <input
           ref="newCallRef"
           class="input num-input"
           type="number"
-          aria-label="Number being called"
+          :aria-label="t('callLog.numberLabel')"
           :placeholder="`> ${latestCall?.number ?? '?'}`"
           v-model="newCallNum"
           @keydown.enter="handleNewCall"
@@ -265,11 +272,11 @@ function goBack() {
           class="input time-input"
           :class="{ dimmed: !useCustomTime }"
           type="datetime-local"
-          aria-label="Time of call"
+          :aria-label="t('callLog.timeLabel')"
           v-model="newCallTime"
           @input="useCustomTime = true"
         />
-        <button class="secondary-btn" @click="handleNewCall">Log</button>
+        <button class="secondary-btn" @click="handleNewCall">{{ t('common.log') }}</button>
       </div>
       <div class="log-hint">
         <button
@@ -277,18 +284,18 @@ function goBack() {
           class="link-btn"
           @click="useCustomTime = false; newCallTime = toLocalInputValue(new Date())"
         >
-          &#8592; switch back to current time
+          &#8592; {{ t('callLog.switchBackToNow') }}
         </button>
         <span v-else class="hint-text">
-          Time field auto-fills to now — edit it to log a past call
+          {{ t('callLog.timeAutoFill') }}
         </span>
       </div>
     </div>
 
     <!-- Call History -->
     <div class="card history-card">
-      <h2 class="section-label">Call history</h2>
-      <div class="history-hint">Click any row to edit · &#10005; to delete</div>
+      <h2 class="section-label">{{ t('callLog.historyTitle') }}</h2>
+      <div class="history-hint">{{ t('callLog.historyHint') }}</div>
       <div class="history-list">
         <template v-for="(c, revI) in [...sortedCalls].reverse()" :key="revI">
           <template v-if="editingIdx === sortedCalls.length - 1 - revI">
@@ -296,7 +303,7 @@ function goBack() {
               <input
                 class="input edit-num"
                 type="number"
-                aria-label="Edit number"
+                :aria-label="t('callLog.editNumber')"
                 v-model="editNum"
                 @keydown.enter="saveEdit"
                 autofocus
@@ -304,12 +311,12 @@ function goBack() {
               <input
                 class="input edit-time"
                 type="datetime-local"
-                aria-label="Edit time"
+                :aria-label="t('callLog.editTime')"
                 v-model="editTime"
                 @keydown.enter="saveEdit"
               />
-              <button class="secondary-btn save-btn" @click="saveEdit">Save</button>
-              <button class="ghost-btn" aria-label="Cancel editing" @click="editingIdx = null">&#10005;</button>
+              <button class="secondary-btn save-btn" @click="saveEdit">{{ t('common.save') }}</button>
+              <button class="ghost-btn" :aria-label="t('callLog.cancelEditing')" @click="editingIdx = null">&#10005;</button>
             </div>
           </template>
           <template v-else>
@@ -322,7 +329,7 @@ function goBack() {
               }"
               role="button"
               tabindex="0"
-              :aria-label="`Edit call number ${c.number}`"
+              :aria-label="t('callLog.editCallNumber', { n: c.number })"
               @click="startEdit(sortedCalls.length - 1 - revI)"
               @keydown.enter="startEdit(sortedCalls.length - 1 - revI)"
               @keydown.space.prevent="startEdit(sortedCalls.length - 1 - revI)"
@@ -332,7 +339,7 @@ function goBack() {
                 <span
                   v-if="sortedCalls.length - 1 - revI === 0"
                   class="initial-badge"
-                >INITIAL</span>
+                >{{ t('callLog.initial') }}</span>
                 <span
                   v-else-if="sortedCalls.length - 1 - revI > 0"
                   class="delta"
@@ -342,17 +349,17 @@ function goBack() {
                       const idx = sortedCalls.length - 1 - revI;
                       const prev = sortedCalls[idx - 1];
                       const gap = Math.max(c.number - prev.number, 1);
-                      return ((c.timestamp - prev.timestamp) / gap / 1000).toFixed(0) + 's/num';
+                      return t('tracker.sPerNum', { n: ((c.timestamp - prev.timestamp) / gap / 1000).toFixed(0) });
                     })()
                   }}
                 </span>
               </div>
               <div class="history-right">
-                <span class="history-time">{{ formatTime(new Date(c.timestamp), use24Hour) }}</span>
+                <span class="history-time">{{ formatTime(new Date(c.timestamp), use24Hour, locale) }}</span>
                 <button
                   v-if="session.calls.length > 1"
                   class="row-delete"
-                  :aria-label="`Delete call number ${c.number}`"
+                  :aria-label="t('callLog.deleteCallNumber', { n: c.number })"
                   @click.stop="handleDeleteCall(sortedCalls.length - 1 - revI)"
                 >&#10005;</button>
               </div>
@@ -362,7 +369,7 @@ function goBack() {
       </div>
     </div>
 
-    <button class="about-btn" @click="navigateTo('about')">About</button>
+    <button class="about-btn" @click="navigateTo('about')">{{ t('common.about') }}</button>
   </div>
 </template>
 
@@ -384,6 +391,12 @@ function goBack() {
   align-items: center;
   width: 100%;
   margin-bottom: -8px;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .back-btn {

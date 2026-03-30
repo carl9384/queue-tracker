@@ -1,31 +1,31 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { navigateTo } from '../store';
+import LanguageSwitcher from './LanguageSwitcher.vue';
+
+const { t } = useI18n();
 </script>
 
 <template>
   <div class="container">
-    <button class="back-btn" @click="navigateTo('sessions')">&#8592; Back</button>
+    <div class="top-bar">
+      <button class="back-btn" @click="navigateTo('sessions')">&#8592; {{ t('common.back') }}</button>
+      <LanguageSwitcher />
+    </div>
 
     <div class="header">
-      <h1 class="header-title">QUEUE WATCH</h1>
+      <h1 class="header-title">{{ t('header.appName') }}</h1>
     </div>
 
     <div class="card">
-      <h2 class="section-label">About</h2>
+      <h2 class="section-label">{{ t('about.title') }}</h2>
 
-      <p class="body">
-        This application was conceived of while waiting in the Farmácia Alto Custo
-        — Unidade Várzea do Carmo. Much love and respect for the team at Várzea do
-        Carmo, SPDM in São Paulo, healthcare providers all over Brazil, and for SUS!
-      </p>
+      <p class="body">{{ t('about.body') }}</p>
     </div>
 
     <figure class="sus-figure">
-      <img src="/eu-defendo-o-sus.jpg" alt="Eu Defendo o SUS — Sistema Único de Saúde" class="sus-img" />
-      <figcaption class="sus-caption">
-        Image by <a href="https://mapamovsaude.net.br/" target="_blank" rel="noopener noreferrer">Mapa de Movimentos pela Saúde</a>,
-        licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
-      </figcaption>
+      <img src="/eu-defendo-o-sus.jpg" :alt="t('about.imageAlt')" class="sus-img" />
+      <figcaption class="sus-caption" v-html="t('about.imageCaption')"></figcaption>
     </figure>
   </div>
 </template>
@@ -42,8 +42,14 @@ import { navigateTo } from '../store';
   gap: 16px;
 }
 
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .back-btn {
-  align-self: flex-start;
   background: none;
   border: none;
   cursor: pointer;
@@ -108,7 +114,7 @@ import { navigateTo } from '../store';
   margin-top: 8px;
   line-height: 1.5;
 }
-.sus-caption a {
+.sus-caption :deep(a) {
   color: var(--color-primary);
 }
 </style>
