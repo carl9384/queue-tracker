@@ -77,11 +77,8 @@ function dismissOnboarding() {
       <div class="header-tagline">{{ t('header.tagline') }}</div>
     </div>
 
-    <!-- Help link + Language switcher -->
-    <div class="header-actions">
-      <button class="help-link" @click="navigateTo('help')">{{ t('common.help') }}</button>
-      <LanguageSwitcher />
-    </div>
+    <!-- Help link -->
+    <button class="help-link" @click="navigateTo('help')">{{ t('common.help') }}</button>
 
     <!-- Onboarding -->
     <div v-if="showOnboarding" class="onboarding">
@@ -250,6 +247,7 @@ function dismissOnboarding() {
     </div>
 
     <button class="about-btn" @click="navigateTo('about')">{{ t('common.about') }}</button>
+    <LanguageSwitcher />
   </div>
 </template>
 
@@ -291,13 +289,6 @@ function dismissOnboarding() {
   letter-spacing: 4px;
   color: var(--color-text-light);
   text-transform: uppercase;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 8px;
 }
 
 /* Onboarding */

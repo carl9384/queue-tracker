@@ -1,37 +1,57 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { getState, setLocale } from '../store';
+import type { SupportedLocale } from '../i18n';
 
 const state = getState();
-const isEn = computed(() => state.locale === 'en-US');
 
-function toggle() {
-  setLocale(isEn.value ? 'pt-BR' : 'en-US');
+const localeLabels: Record<SupportedLocale, string> = {
+  'en-US': 'English',
+  'pt-BR': 'Português',
+};
+
+function onChange(event: Event) {
+  const value = (event.target as HTMLSelectElement).value as SupportedLocale;
+  setLocale(value);
 }
 </script>
 
 <template>
-  <button class="lang-toggle" @click="toggle" :aria-label="isEn ? 'Mudar para Português' : 'Switch to English'">
-    {{ isEn ? 'PT' : 'EN' }}
-  </button>
+  <div class="lang-switcher">
+    <select
+      class="lang-select"
+      :value="state.locale"
+      @change="onChange"
+      aria-label="Language"
+    >
+      <option value="en-US">{{ localeLabels['en-US'] }}</option>
+      <option value="pt-BR">{{ localeLabels['pt-BR'] }}</option>
+    </select>
+  </div>
 </template>
 
 <style scoped>
-.lang-toggle {
+.lang-switcher {
+  margin-top: 8px;
+}
+.lang-select {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 6px;
-  padding: 4px 10px;
+  padding: 4px 8px;
   color: var(--color-text-muted);
   font-family: 'Courier New', Courier, monospace;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 1px;
   cursor: pointer;
+  outline: none;
 }
-.lang-toggle:hover {
+.lang-select:hover {
   background: var(--color-primary-light);
   color: var(--color-text-secondary);
   border-color: var(--color-primary);
+}
+.lang-select:focus-visible {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
 }
 </style>

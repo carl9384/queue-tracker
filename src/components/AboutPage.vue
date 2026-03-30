@@ -8,10 +8,7 @@ const { t } = useI18n();
 
 <template>
   <div class="container">
-    <div class="top-bar">
-      <button class="back-btn" @click="navigateTo('sessions')">&#8592; {{ t('common.back') }}</button>
-      <LanguageSwitcher />
-    </div>
+    <button class="back-btn" @click="navigateTo('sessions')">&#8592; {{ t('common.back') }}</button>
 
     <div class="header">
       <h1 class="header-title">{{ t('header.appName') }}</h1>
@@ -27,6 +24,7 @@ const { t } = useI18n();
       <img src="/eu-defendo-o-sus.jpg" :alt="t('about.imageAlt')" class="sus-img" />
       <figcaption class="sus-caption" v-html="t('about.imageCaption')"></figcaption>
     </figure>
+    <LanguageSwitcher />
   </div>
 </template>
 
@@ -42,14 +40,8 @@ const { t } = useI18n();
   gap: 16px;
 }
 
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
 .back-btn {
+  align-self: flex-start;
   background: none;
   border: none;
   cursor: pointer;

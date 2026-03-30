@@ -164,14 +164,11 @@ function goBack() {
     <!-- Top bar -->
     <div class="top-bar">
       <button class="back-btn" @click="goBack">&#8592; {{ t('tracker.allSessions') }}</button>
-      <div class="top-bar-right">
-        <div class="time-toggle-group">
-          <span class="time-toggle-label">{{ t('tracker.toggleTimeFormat') }}</span>
-          <button class="time-toggle" @click="toggleTimeFormat">
-            {{ use24Hour ? '24H' : '12H' }}
-          </button>
-        </div>
-        <LanguageSwitcher />
+      <div class="time-toggle-group">
+        <span class="time-toggle-label">{{ t('tracker.toggleTimeFormat') }}</span>
+        <button class="time-toggle" @click="toggleTimeFormat">
+          {{ use24Hour ? '24H' : '12H' }}
+        </button>
       </div>
     </div>
 
@@ -370,6 +367,7 @@ function goBack() {
     </div>
 
     <button class="about-btn" @click="navigateTo('about')">{{ t('common.about') }}</button>
+    <LanguageSwitcher />
   </div>
 </template>
 
@@ -391,12 +389,6 @@ function goBack() {
   align-items: center;
   width: 100%;
   margin-bottom: -8px;
-}
-
-.top-bar-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .back-btn {
