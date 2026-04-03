@@ -98,14 +98,15 @@ export function navigateTo(view: ViewName): void {
   state.currentView = view;
 }
 
-export function createSession(name: string, myNumber: number, joinedAt: number, currentNumber: number, observedAt: number): QueueSession {
+export function createSession(name: string, myNumber: number, currentNumber: number): QueueSession {
+  const now = Date.now();
   const session: QueueSession = {
     id: generateId(),
     name,
     myNumber,
-    joinedAt,
-    calls: [{ number: currentNumber, timestamp: observedAt }],
-    createdAt: Date.now(),
+    joinedAt: now,
+    calls: [{ number: currentNumber, timestamp: now }],
+    createdAt: now,
     done: false,
   };
   state.sessions.push(session);
@@ -114,17 +115,16 @@ export function createSession(name: string, myNumber: number, joinedAt: number, 
   return session;
 }
 
-export function addCall(sessionId: string, number: number, timestamp: number): void {
+export function addCall(sessionId: string, number: number): void {
   const session = state.sessions.find(s => s.id === sessionId);
   if (!session) return;
-  session.calls.push({ number, timestamp });
+  session.calls.push({ number, timestamp: Date.now() });
 }
 
-export function updateCall(sessionId: string, index: number, number: number, timestamp: number): void {
+export function updateCall(sessionId: string, index: number, number: number): void {
   const session = state.sessions.find(s => s.id === sessionId);
   if (!session || index < 0 || index >= session.calls.length) return;
-  session.calls[index] = { number, timestamp };
-  session.calls.sort((a, b) => a.timestamp - b.timestamp);
+  session.calls[index] = { number, timestamp: session.calls[index].timestamp };
 }
 
 export function deleteCall(sessionId: string, index: number): void {

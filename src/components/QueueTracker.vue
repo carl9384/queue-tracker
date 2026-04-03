@@ -12,7 +12,7 @@ import {
   toggleTimeFormat,
   navigateTo,
 } from '../store';
-import { formatTime, formatDuration, formatETA, toLocalInputValue, parseInputTime } from '../format';
+import { formatTime, formatDuration, formatETA } from '../format';
 import LanguageSwitcher from './LanguageSwitcher.vue';
 
 const { t } = useI18n();
@@ -23,13 +23,10 @@ const locale = computed(() => state.locale);
 const now = ref(new Date());
 
 const newCallNum = ref('');
-const newCallTime = ref(toLocalInputValue(new Date()));
-const useCustomTime = ref(false);
 const newCallRef = ref<HTMLInputElement | null>(null);
 
 const editingIdx = ref<number | null>(null);
 const editNum = ref('');
-const editTime = ref('');
 
 const showLogTooltip = ref(true);
 
@@ -38,7 +35,6 @@ let timer: ReturnType<typeof setInterval>;
 onMounted(() => {
   timer = setInterval(() => {
     now.value = new Date();
-    if (!useCustomTime.value) newCallTime.value = toLocalInputValue(new Date());
   }, 1000);
   nextTick(() => newCallRef.value?.focus());
 });
@@ -116,10 +112,8 @@ function handleNewCall() {
   const sortedByNum = [...session.value.calls].sort((a, b) => a.number - b.number);
   const last = sortedByNum[sortedByNum.length - 1];
   if (n <= last.number) return;
-  const ts = useCustomTime.value ? (parseInputTime(newCallTime.value) ?? Date.now()) : Date.now();
-  addCall(session.value.id, n, ts);
+  addCall(session.value.id, n);
   newCallNum.value = '';
-  if (!useCustomTime.value) newCallTime.value = toLocalInputValue(new Date());
   newCallRef.value?.focus();
   showLogTooltip.value = false;
 }
@@ -128,19 +122,17 @@ function startEdit(idx: number) {
   editingIdx.value = idx;
   const c = sortedCalls.value[idx];
   editNum.value = String(c.number);
-  editTime.value = toLocalInputValue(new Date(c.timestamp));
 }
 
 function saveEdit() {
   const n = parseInt(editNum.value);
-  const ts = parseInputTime(editTime.value);
-  if (isNaN(n) || !ts) { editingIdx.value = null; return; }
+  if (isNaN(n)) { editingIdx.value = null; return; }
   const sorted = sortedCalls.value;
   const original = sorted[editingIdx.value!];
   const realIdx = session.value.calls.findIndex(
     c => c.number === original.number && c.timestamp === original.timestamp
   );
-  if (realIdx !== -1) updateCall(session.value.id, realIdx, n, ts);
+  if (realIdx !== -1) updateCall(session.value.id, realIdx, n);
   editingIdx.value = null;
 }
 
@@ -266,27 +258,7 @@ function goBack() {
           v-model="newCallNum"
           @keydown.enter="handleNewCall"
         />
-        <input
-          class="input time-input"
-          :class="{ dimmed: !useCustomTime }"
-          type="datetime-local"
-          :aria-label="t('callLog.timeLabel')"
-          v-model="newCallTime"
-          @input="useCustomTime = true"
-        />
         <button class="secondary-btn" @click="handleNewCall">{{ t('common.log') }}</button>
-      </div>
-      <div class="log-hint">
-        <button
-          v-if="useCustomTime"
-          class="link-btn"
-          @click="useCustomTime = false; newCallTime = toLocalInputValue(new Date())"
-        >
-          &#8592; {{ t('callLog.switchBackToNow') }}
-        </button>
-        <span v-else class="hint-text">
-          {{ t('callLog.timeAutoFill') }}
-        </span>
       </div>
     </div>
 
@@ -305,13 +277,6 @@ function goBack() {
                 v-model="editNum"
                 @keydown.enter="saveEdit"
                 autofocus
-              />
-              <input
-                class="input edit-time"
-                type="datetime-local"
-                :aria-label="t('callLog.editTime')"
-                v-model="editTime"
-                @keydown.enter="saveEdit"
               />
               <button class="secondary-btn save-btn" @click="saveEdit">{{ t('common.save') }}</button>
               <button class="ghost-btn" :aria-label="t('callLog.cancelEditing')" @click="editingIdx = null">&#10005;</button>
@@ -677,16 +642,6 @@ function goBack() {
     box-shadow: 0 0 14px 4px rgba(58, 32, 16, 0.28);
   }
 }
-.time-input {
-  flex: 1;
-  min-width: 160px;
-  font-size: 13px;
-  transition: opacity 0.2s;
-}
-.time-input.dimmed {
-  opacity: 0.4;
-}
-
 .secondary-btn {
   padding: 12px 18px;
   background: var(--color-primary-light);
@@ -703,27 +658,6 @@ function goBack() {
 .secondary-btn:hover {
   background: var(--color-primary-lighter);
   border-color: var(--color-primary);
-}
-
-.log-hint {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.link-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-primary);
-  font-size: 11px;
-  font-family: 'Courier New', Courier, monospace;
-  text-decoration: underline;
-  padding: 0;
-}
-.hint-text {
-  font-size: 11px;
-  color: var(--color-text-faded);
 }
 
 .history-hint {
@@ -824,12 +758,6 @@ function goBack() {
   width: 80px;
   flex: 0 0 80px;
   font-size: 15px;
-  padding: 7px 10px;
-}
-.edit-time {
-  flex: 1;
-  min-width: 160px;
-  font-size: 12px;
   padding: 7px 10px;
 }
 .save-btn {

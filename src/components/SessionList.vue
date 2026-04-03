@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { getState, createSession, setActiveSession, deleteSession, completeOnboarding, navigateTo } from '../store';
-import { formatDate, toLocalInputValue, parseInputTime } from '../format';
+import { formatDate } from '../format';
 import LanguageSwitcher from './LanguageSwitcher.vue';
 
 const { t } = useI18n();
@@ -12,8 +12,6 @@ const showNewForm = ref(false);
 const nameInput = ref('');
 const myNumberInput = ref('');
 const currentNumInput = ref('');
-const joinedAtInput = ref(toLocalInputValue(new Date()));
-const currentNumTimeInput = ref(toLocalInputValue(new Date()));
 
 const showOnboarding = computed(() => !state.onboardingDone);
 
@@ -29,18 +27,14 @@ function openNewForm() {
   nameInput.value = '';
   myNumberInput.value = '';
   currentNumInput.value = '';
-  joinedAtInput.value = toLocalInputValue(new Date());
-  currentNumTimeInput.value = toLocalInputValue(new Date());
 }
 
 function handleCreate() {
   const my = parseInt(myNumberInput.value);
   const curr = parseInt(currentNumInput.value);
   if (isNaN(my) || isNaN(curr)) return;
-  const jAt = parseInputTime(joinedAtInput.value) ?? Date.now();
-  const cAt = parseInputTime(currentNumTimeInput.value) ?? Date.now();
   const name = nameInput.value.trim() || t('newSession.defaultName', { date: formatDate(new Date(), state.locale) });
-  createSession(name, my, jAt, curr, cAt);
+  createSession(name, my, curr);
   showNewForm.value = false;
   if (!state.onboardingDone) completeOnboarding();
 }
@@ -135,14 +129,6 @@ function dismissOnboarding() {
         v-model="myNumberInput"
       />
 
-      <label class="label mt-16" for="joined-at">{{ t('newSession.joinedAtLabel') }}</label>
-      <input
-        id="joined-at"
-        class="input"
-        type="datetime-local"
-        v-model="joinedAtInput"
-      />
-
       <div class="divider" />
 
       <label class="label" for="current-num">{{ t('newSession.currentNumLabel') }}</label>
@@ -156,17 +142,6 @@ function dismissOnboarding() {
 
       <div class="tooltip" v-if="showOnboarding">
         {{ t('newSession.currentNumTooltip') }}
-      </div>
-
-      <label class="label mt-16" for="observed-at">{{ t('newSession.observedAtLabel') }}</label>
-      <input
-        id="observed-at"
-        class="input"
-        type="datetime-local"
-        v-model="currentNumTimeInput"
-      />
-      <div class="hint">
-        {{ t('newSession.observedAtHint') }}
       </div>
 
       <div class="form-actions">
