@@ -71,10 +71,10 @@
     "sPerNum": "{n}s/num"
   },
   "callLog": {
-    "title": "Log a number call",
+    "title": "Log the latest number",
     "tooltip": "When a new number is called, type it here and tap Log. The more you log, the better the prediction gets.",
     "numberLabel": "Number being called",
-    "historyTitle": "Call history",
+    "historyTitle": "Numbers called",
     "historyHint": "Click any row to edit \u00b7 \u2715 to delete",
     "editCallNumber": "Edit call number {n}",
     "editNumber": "Edit number",

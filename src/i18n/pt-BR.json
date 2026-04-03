@@ -71,10 +71,10 @@
     "sPerNum": "{n}s/senha"
   },
   "callLog": {
-    "title": "Registrar uma chamada",
+    "title": "Registrar nova senha",
     "tooltip": "Quando uma nova senha for chamada, digite aqui e toque em Registrar. Quanto mais voc\u00ea registrar, melhor a previs\u00e3o.",
     "numberLabel": "Senha sendo chamada",
-    "historyTitle": "Hist\u00f3rico de chamadas",
+    "historyTitle": "Senhas chamadas",
     "historyHint": "Clique em uma linha para editar \u00b7 \u2715 para excluir",
     "editCallNumber": "Editar chamada n\u00famero {n}",
     "editNumber": "Editar n\u00famero",
